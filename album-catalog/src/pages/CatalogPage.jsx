@@ -1,12 +1,8 @@
-// src/pages/CatalogPage.jsx
-
-import React, {useState, useEffect} from 'react';
-import {Input, Pagination} from '@nextui-org/react';
-import {useNavigate} from 'react-router-dom';
-import {supabase} from "../lib/helper/supabaseClient.js";
-import {HeartIcon} from "../components/icons/HeartIcon.jsx";
+import React, { useState, useEffect } from 'react';
+import { Input, Pagination } from '@nextui-org/react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from "../lib/helper/supabaseClient.js";
 import AlbumCard from "../components/AlbumCard.jsx";
-
 
 const CatalogPage = () => {
     const [albums, setAlbums] = useState([]);
@@ -18,44 +14,36 @@ const CatalogPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAlbums(currentPage, albumsPerPage);
-    }, []);
-
-    useEffect(() => {
-        handleSearch();
-    }, [searchTerm, albums]);
+        if (searchTerm === '') {
+            fetchAlbums(currentPage, albumsPerPage);
+        } else {
+            handleSearch();
+        }
+    }, [currentPage, searchTerm]);
 
     const fetchAlbums = (page, albumsPerPage) => {
         const offset = (page - 1) * albumsPerPage;
 
-        const albumsPromise = supabase
+        supabase
             .from('album')
             .select('*')
-            .order('id', {ascending: true})
-            .range(offset, offset + albumsPerPage - 1);
-
-        const albumCountPromise = supabase
-            .from('album')
-            .select('*', {count: 'exact', head: true});
-
-        albumsPromise
-            .then(({data, error: albumsError}) => {
-                if (albumsError) {
-                    throw albumsError;
+            .order('id', { ascending: true })
+            .range(offset, offset + albumsPerPage - 1)
+            .then(({ data, error }) => {
+                if (error) {
+                    throw error;
                 }
-                return data;
-            })
-            .then((data) => {
+                console.log(data);
                 setAlbums(data);
                 setFilteredAlbums(data);
-                console.log(data);
+            });
 
-                // After setting albums, fetch count
-                return albumCountPromise;
-            })
-            .then(({count, error: countError}) => {
-                if (countError) {
-                    throw countError;
+        supabase
+            .from('album')
+            .select('*', { count: 'exact', head: true })
+            .then(({ count, error }) => {
+                if (error) {
+                    throw error;
                 }
                 setAlbumsNumber(count);
             })
@@ -66,40 +54,43 @@ const CatalogPage = () => {
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
+        setCurrentPage(1); // Reset to first page on new search term
     };
 
     const handleSearch = () => {
-        if (searchTerm !== '') {
+        const offset = (currentPage - 1) * albumsPerPage;
 
+        supabase
+            .from('album')
+            .select('*')
+            .or(`name.ilike.%${searchTerm}%,art_creator.ilike.%${searchTerm}%`)
+            .order('id', { ascending: true })
+            .range(offset, offset + albumsPerPage - 1)
+            .then(({ data, error }) => {
+                if (error) {
+                    throw error;
+                }
+                console.log(data);
+                setFilteredAlbums(data);
+            });
 
-            const albumsBySearchTerm = supabase
-                .from('album')
-                .select('*')
-                .or(`or(name.ilike.%${searchTerm}%),or(art_creator.ilike.%${searchTerm}%)`);
-
-            console.log(searchTerm);
-
-            albumsBySearchTerm
-                .then(({data, error: albumsError}) => {
-                    console.log(data);
-                    if (albumsError) {
-                        throw albumsError;
-                    }
-                    setFilteredAlbums(data);
-                    setCurrentPage(1);
-                })
-
-                .catch((error) => {
-                    console.error(error);
-                })
-
-        }
-
+        supabase
+            .from('album')
+            .select('*', { count: 'exact', head: true })
+            .or(`name.ilike.%${searchTerm}%,art_creator.ilike.%${searchTerm}%`)
+            .then(({ count, error }) => {
+                if (error) {
+                    throw error;
+                }
+                setAlbumsNumber(count);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        fetchAlbums(page, albumsPerPage);
     };
 
     const handleAlbumClick = (albumId) => {
@@ -113,26 +104,20 @@ const CatalogPage = () => {
 
     const handleDeleteClick = async (e, albumId) => {
         e.stopPropagation();
-        const {error} = await supabase.from('albums').delete().eq('id', albumId);
+        const { error } = await supabase.from('albums').delete().eq('id', albumId);
         if (error) {
             console.error(error);
         } else {
-            fetchAlbums();
+            fetchAlbums(currentPage, albumsPerPage);
         }
     };
 
-    const indexOfLastAlbum = currentPage * albumsPerPage;
-    const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-    const currentAlbums = filteredAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
-
     return (
         <div className="">
-            <div className="flex  z-20 justify-around  w-full my-4">
+            <div className="flex z-20 justify-around w-full my-4">
                 <Input
                     isClearable={true}
-                    onClear={() => {
-                        setSearchTerm('')
-                    }}
+                    onClear={() => setSearchTerm('')}
                     size="sm"
                     radius="lg"
                     onChange={handleSearchChange}
@@ -160,9 +145,6 @@ const CatalogPage = () => {
                         ],
                     }}
                     placeholder="Type to search..."
-                    // startContent={
-                    //     <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-                    // }
                 />
                 {filteredAlbums.length > 0 && (
                     <Pagination
@@ -177,15 +159,13 @@ const CatalogPage = () => {
                         onChange={handlePageChange}
                     />
                 )}
-
                 <div>Filter</div>
-
             </div>
             <div className="albums-container">
-                {albumsNumber > 0 ? (
+                {filteredAlbums.length > 0 ? (
                     <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
-                        {currentAlbums.map((album) => (
-                            <AlbumCard album={album} key={album.id}/>
+                        {filteredAlbums.map((album) => (
+                            <AlbumCard album={album} key={album.id} />
                         ))}
                     </div>
                 ) : (
