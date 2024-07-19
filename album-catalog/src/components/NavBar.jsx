@@ -9,11 +9,13 @@ import {
 } from "@nextui-org/navbar";
 import React, {useContext} from "react";
 import MuseLogo from "./MuseLogo.jsx";
-import {Link} from "@nextui-org/link";
+
 import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
 import {Avatar, AvatarGroup, AvatarIcon} from "@nextui-org/avatar";
+// import {Link} from "@nextui-org/link";  -- causing navbar rerender
+import { Link } from "react-router-dom";
 
 
 
@@ -49,13 +51,13 @@ const NavBar = () => {
                 {session?.user ?
                     <>
                         <NavbarItem isActive={location.pathname === "/catalog"}>
-                            <Link href="/catalog" aria-current="page">
+                            <Link to="/catalog" aria-current="page">
                                 Albums
                             </Link>
                         </NavbarItem>
 
                         <NavbarItem isActive={location.pathname === "/favourites"}>
-                            <Link href="/favourites" aria-current="page">
+                            <Link to="/favourites" aria-current="page">
                                 Favourites
                             </Link>
                         </NavbarItem>
