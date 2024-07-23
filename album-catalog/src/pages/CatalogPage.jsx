@@ -7,7 +7,6 @@ import {useNavigate} from 'react-router-dom';
 import {supabase} from "../lib/helper/supabaseClient.js";
 import AlbumCard from "../components/AlbumCard.jsx";
 import FilterModal from "../components/FilterModal.jsx";
-import {FaFilter} from "react-icons/fa6";
 
 const CatalogPage = () => {
     const [albums, setAlbums] = useState([]);
@@ -18,17 +17,16 @@ const CatalogPage = () => {
     const [filteredAlbums, setFilteredAlbums] = useState([]);
     const [genre, setGenre] = useState('');
     const [format, setFormat] = useState('');
-    const [yearRange, setYearRange] = useState([1900, new Date().getFullYear()]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (searchTerm === '' && !genre && !format && yearRange[0] === 1900 && yearRange[1] === new Date().getFullYear()) {
+        if (searchTerm === '' && !genre && !format) {
             fetchAlbums(currentPage, albumsPerPage);
         } else {
             handleSearch();
         }
-    }, [currentPage, searchTerm, genre, format, yearRange]);
+    }, [currentPage, searchTerm, genre, format]);
 
     const fetchAlbums = (page, albumsPerPage) => {
         const offset = (page - 1) * albumsPerPage;
@@ -77,12 +75,6 @@ const CatalogPage = () => {
         if (searchTerm) {
             query = query.or(`name.ilike.%${searchTerm}%,art_creator.ilike.%${searchTerm}%`);
         }
-        // if (genre) {
-        //     query = query.eq('genre', genre.toUpperCase());
-        // }
-        // if (format) {
-        //     query = query.eq('format', format.toUpperCase());
-        // }
 
 
         query.then(({data, error}) => {
@@ -105,7 +97,6 @@ const CatalogPage = () => {
         if (format) {
             countQuery = countQuery.eq('format', format);
         }
-        countQuery = countQuery.gte('year', yearRange[0]).lte('year', yearRange[1]);
 
         countQuery.then(({count, error}) => {
             if (error) {
@@ -120,33 +111,6 @@ const CatalogPage = () => {
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-    };
-
-    const handleAlbumClick = (albumId) => {
-        navigate(`/albums/${albumId}`);
-    };
-
-    const handleEditClick = (e, albumId) => {
-        e.stopPropagation();
-        navigate(`/albums/edit/${albumId}`);
-    };
-
-    const handleDeleteClick = async (e, albumId) => {
-        e.stopPropagation();
-        const {error} = await supabase.from('albums').delete().eq('id', albumId);
-        if (error) {
-            console.error(error);
-        } else {
-            fetchAlbums(currentPage, albumsPerPage);
-        }
-    };
-
-    const handleFilterChange = (setter) => (e) => {
-        setter(e.target.value);
-    };
-
-    const handleYearRangeChange = (value) => {
-        setYearRange(value);
     };
 
     return (
@@ -183,14 +147,14 @@ const CatalogPage = () => {
                     }}
                     placeholder="Type to search..."
                 />
+
                 <FilterModal
                     genre={genre}
                     setGenre={setGenre}
                     format={format}
                     setFormat={setFormat}
-                    yearRange={yearRange}
-                    setYearRange={setYearRange}
                 />
+
                 {filteredAlbums.length > 0 && (
                     <Pagination
                         size="sm"
@@ -205,6 +169,7 @@ const CatalogPage = () => {
                     />
                 )}
             </div>
+
             <div className="albums-container">
                 {filteredAlbums.length > 0 ? (
                     <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">

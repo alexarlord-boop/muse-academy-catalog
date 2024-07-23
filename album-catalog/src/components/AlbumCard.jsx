@@ -19,6 +19,11 @@ export default function AlbumCard({album}) {
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate();
 
+    function handleLikeClick(event) {
+        event.stopPropagation();
+        setLiked((prevState) => !prevState);
+    }
+
     return (
         <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270">
             <CardBody className="cursor-pointer overflow-visible py-2" onClick={() => navigate('/catalog/'+album.id)}>
@@ -43,7 +48,7 @@ export default function AlbumCard({album}) {
                     className="text-red-600 data-[hover]:bg-red-100 absolute bottom-2 right-2"
                     radius="full"
                     variant="light"
-                    onPress={() => setLiked((v) => !v)}
+                    onPress={(e) => handleLikeClick(e)}
                 >
                     <HeartIcon
                         className={liked ? "[&>path]:stroke-transparent" : ""}

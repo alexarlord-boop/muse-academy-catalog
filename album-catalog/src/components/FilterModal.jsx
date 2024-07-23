@@ -7,12 +7,9 @@ import {
     ModalFooter,
     Button,
     Select,
-    Input,
-    useDisclosure,
     SelectItem
 } from "@nextui-org/react";
 import {supabase} from "../lib/helper/supabaseClient.js";
-import {createPortal} from "react-dom";
 import {FaFilter} from "react-icons/fa6";
 
 
@@ -61,6 +58,8 @@ const FilterModal = ({
             .catch((error) => {
                 console.error(error);
             });
+
+        console.log('Fetched all selectors data');
     };
 
 
@@ -74,51 +73,53 @@ const FilterModal = ({
                 <FaFilter/>
             </Button>
             {
-                showFilterModal && createPortal(
-                    <Modal onClose={() => setShowFilterModal(false)} isOpen={showFilterModal}>
-                        <ModalContent>
-                            {(onClose) => (
-                                <>
-                                    <ModalHeader className="flex flex-col gap-1">Filter Albums</ModalHeader>
-                                    <ModalBody>
-                                        <Select
-                                            aria-label="filter genre select"
-                                            placeholder="Select Genre"
-                                            value={genre}
-                                            onChange={handleFilterChange(setGenre)}
-                                            classNames={{
-                                                base: 'mb-4',
-                                            }}
-                                        >
-                                            {genres.map((g) => (
-                                                <SelectItem key={g.id} value={g.name}>{g.name}</SelectItem>
-                                            ))}
-                                        </Select>
-                                        <Select
-                                            aria-label="filter format select"
-                                            placeholder="Select Format"
-                                            value={format}
-                                            onChange={handleFilterChange(setFormat)}
-                                            classNames={{
-                                                base: 'mb-4',
-                                            }}
-                                        >
-                                            {formats.map((f) => (
-                                                <SelectItem key={f.id} value={f.name}>{f.name}</SelectItem>
-                                            ))}
-                                        </Select>
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        <Button auto onPress={onClose}>
-                                            Apply Filters
-                                        </Button>
-                                    </ModalFooter>
-                                </>
-                            )}
-                        </ModalContent>
-                    </Modal>,
-                    document.getElementById('modal-root')
-                )
+                showFilterModal &&
+
+                <Modal portalContainer={document.getElementById('modal')} onClose={() => setShowFilterModal(false)}
+                       isOpen={showFilterModal}>
+                    <ModalContent>
+                        {(onClose) => (
+                            <>
+                                <ModalHeader className="flex flex-col gap-1">Filter Albums</ModalHeader>
+                                <ModalBody>
+                                    <Select
+                                        aria-label="filter genre select"
+                                        placeholder="Select Genre"
+                                        value={genre}
+                                        onChange={handleFilterChange(setGenre)}
+                                        classNames={{
+                                            base: 'mb-4',
+                                        }}
+                                    >
+                                        {genres.map((g) => (
+                                            <SelectItem key={g.id} value={g.name}>{g.name}</SelectItem>
+                                        ))}
+                                    </Select>
+                                    <Select
+                                        aria-label="filter format select"
+                                        placeholder="Select Format"
+                                        value={format}
+                                        onChange={handleFilterChange(setFormat)}
+                                        classNames={{
+                                            base: 'mb-4',
+                                        }}
+                                    >
+                                        {formats.map((f) => (
+                                            <SelectItem key={f.id} value={f.name}>{f.name}</SelectItem>
+                                        ))}
+                                    </Select>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button auto onPress={onClose}>
+                                        Apply Filters
+                                    </Button>
+                                </ModalFooter>
+                            </>
+                        )}
+                    </ModalContent>
+                </Modal>
+
+
             }
         </>
     );
