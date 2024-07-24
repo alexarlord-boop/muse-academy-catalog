@@ -1,10 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {
-    Input,
-    Pagination,
-} from '@nextui-org/react';
-import {useNavigate} from 'react-router-dom';
-import {supabase} from "../lib/helper/supabaseClient.js";
+import React, { useState, useEffect } from 'react';
+import { Input, Pagination } from '@nextui-org/react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from "../lib/helper/supabaseClient.js";
 import AlbumCard from "../components/AlbumCard.jsx";
 import FilterModal from "../components/FilterModal.jsx";
 
@@ -19,98 +16,80 @@ const CatalogPage = () => {
     const [format, setFormat] = useState('');
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        if (searchTerm === '' && !genre && !format) {
-            fetchAlbums(currentPage, albumsPerPage);
-        } else {
-            handleSearch();
-        }
-    }, [currentPage, searchTerm, genre, format]);
+        const query = new URLSearchParams(location.search);
+        const search = query.get('search') || '';
+        const page = parseInt(query.get('page'), 10) || 1;
+        const genreParam = query.get('genre') || '';
+        const formatParam = query.get('format') || '';
 
-    const fetchAlbums = (page, albumsPerPage) => {
-        const offset = (page - 1) * albumsPerPage;
 
-        supabase
-            .from('album')
-            .select('*')
-            .order('id', {ascending: true})
-            .range(offset, offset + albumsPerPage - 1)
-            .then(({data, error}) => {
-                if (error) {
-                    throw error;
-                }
-                setAlbums(data);
-                setFilteredAlbums(data);
-            });
+        setCurrentPage(page);
+        setSearchTerm(search);
+        setGenre(genreParam);
+        setFormat(formatParam);
 
-        supabase
-            .from('album')
-            .select('*', {count: 'exact', head: true})
-            .then(({count, error}) => {
-                if (error) {
-                    throw error;
-                }
-                setAlbumsNumber(count);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
+        console.log(query.toString());
+
+        handleSearch(search, page, genreParam, formatParam);
+
+    }, [location.search]);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
         setCurrentPage(1); // Reset to first page on new search term
+        updateURL(e.target.value, genre, format, 1);
     };
 
-    const handleSearch = () => {
-        const offset = (currentPage - 1) * albumsPerPage;
+
+    const handleSearch = (search, page, genre, format) => {
+        const offset = (page - 1) * albumsPerPage;
 
         let query = supabase
             .from('album')
-            .select('*')
-            .order('id', {ascending: true})
+            .select('*', { count: 'exact' }) // Combine data fetch and count
+            .order('id', { ascending: true })
             .range(offset, offset + albumsPerPage - 1);
 
-        if (searchTerm) {
-            query = query.or(`name.ilike.%${searchTerm}%,art_creator.ilike.%${searchTerm}%`);
-        }
-
-
-        query.then(({data, error}) => {
-            if (error) {
-                throw error;
-            }
-            setFilteredAlbums(data);
-        });
-
-        let countQuery = supabase
-            .from('album')
-            .select('*', {count: 'exact', head: true});
-
-        if (searchTerm) {
-            countQuery = countQuery.or(`name.ilike.%${searchTerm}%,art_creator.ilike.%${searchTerm}%`);
+        if (search) {
+            query = query.or(`name.ilike.%${search}%,art_creator.ilike.%${search}%`);
         }
         if (genre) {
-            countQuery = countQuery.eq('genre', genre);
+            query = query.eq('genre1', genre);
         }
         if (format) {
-            countQuery = countQuery.eq('format', format);
+            query = query.eq('format', format);
         }
 
-        countQuery.then(({count, error}) => {
+        query.then(({ data, count, error }) => {
             if (error) {
-                throw error;
-            }
-            setAlbumsNumber(count);
-        })
-            .catch((error) => {
                 console.error(error);
-            });
+                return;
+            }
+            setFilteredAlbums(data);
+            setAlbumsNumber(count);
+        }).catch((error) => {
+            console.error(error);
+        });
     };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        updateURL(searchTerm, genre, format, page);
+    };
+
+    const updateURL = (search, genre, format, page) => {
+        const query = new URLSearchParams();
+        if (search) query.set('search', search);
+        if (genre) query.set('genre', genre);
+        if (format) query.set('format', format);
+        if (page) query.set('page', page);
+
+        console.log(query.toString());
+
+        navigate(`?${query.toString()}`);
     };
 
     return (
@@ -118,7 +97,7 @@ const CatalogPage = () => {
             <div className="flex z-20 justify-around w-full my-4">
                 <Input
                     isClearable={true}
-                    onClear={() => setSearchTerm('')}
+                    onClear={() => updateURL('', genre, format, 1)}
                     size="sm"
                     radius="lg"
                     onChange={handleSearchChange}
@@ -153,9 +132,11 @@ const CatalogPage = () => {
                     setGenre={setGenre}
                     format={format}
                     setFormat={setFormat}
+                    onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
                 />
 
                 {filteredAlbums.length > 0 && (
+                    // TODO:- when using navbar 'Albums' -- page is not changed
                     <Pagination
                         size="sm"
                         isCompact
@@ -164,7 +145,7 @@ const CatalogPage = () => {
                         showControls={Math.ceil(albumsNumber / albumsPerPage) > 1}
                         showShadow={true}
                         total={Math.ceil(albumsNumber / albumsPerPage)}
-                        initialPage={1}
+                        initialPage={currentPage}
                         onChange={handlePageChange}
                     />
                 )}
@@ -174,14 +155,13 @@ const CatalogPage = () => {
                 {filteredAlbums.length > 0 ? (
                     <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
                         {filteredAlbums.map((album) => (
-                            <AlbumCard album={album} key={album.id}/>
+                            <AlbumCard album={album} key={album.id} />
                         ))}
                     </div>
                 ) : (
                     <p>No albums found</p>
                 )}
             </div>
-
         </div>
     );
 };

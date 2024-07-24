@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Modal,
     ModalContent,
@@ -9,20 +9,21 @@ import {
     Select,
     SelectItem
 } from "@nextui-org/react";
-import {supabase} from "../lib/helper/supabaseClient.js";
-import {FaFilter} from "react-icons/fa6";
-
+import { supabase } from "../lib/helper/supabaseClient.js";
+import { FaFilter } from "react-icons/fa6";
 
 const FilterModal = ({
                          genre,
                          setGenre,
                          format,
                          setFormat,
-
+                         onApplyFilters,
                      }) => {
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [genres, setGenres] = useState([]);
     const [formats, setFormats] = useState([]);
+    const [deferredGenre, setDeferredGenre] = useState(genre);
+    const [deferredFormat, setDeferredFormat] = useState(format);
 
     useEffect(() => {
         if (showFilterModal) {
@@ -30,16 +31,14 @@ const FilterModal = ({
         }
     }, [showFilterModal]);
 
-
     const fetchGenresAndFormats = () => {
         supabase
             .from('album_genre')
             .select('*')
-            .then(({data, error}) => {
+            .then(({ data, error }) => {
                 if (error) {
                     throw error;
                 }
-                console.log(data);
                 setGenres(data);
             })
             .catch((error) => {
@@ -49,34 +48,31 @@ const FilterModal = ({
         supabase
             .from('album_format')
             .select('*')
-            .then(({data: formatData, error: formatError}) => {
-                if (formatError) {
-                    throw formatError;
+            .then(({ data, error }) => {
+                if (error) {
+                    throw error;
                 }
-                setFormats(formatData);
+                setFormats(data);
             })
             .catch((error) => {
                 console.error(error);
             });
-
-        console.log('Fetched all selectors data');
     };
 
-
-    const handleFilterChange = (setter) => (e) => {
-        setter(e.target.value);
+    const handleApplyFilters = () => {
+        // setGenre(deferredGenre);
+        // setFormat(deferredFormat);
+        onApplyFilters(genre, format);
+        setShowFilterModal(false);
     };
 
     return (
         <>
             <Button size="sm" variant="bordered" onClick={() => setShowFilterModal(true)}>
-                <FaFilter/>
+                <FaFilter />
             </Button>
-            {
-                showFilterModal &&
-
-                <Modal portalContainer={document.getElementById('modal')} onClose={() => setShowFilterModal(false)}
-                       isOpen={showFilterModal}>
+            {showFilterModal && (
+                <Modal portalContainer={document.getElementById('modal')} onClose={() => setShowFilterModal(false)} isOpen={showFilterModal}>
                     <ModalContent>
                         {(onClose) => (
                             <>
@@ -86,31 +82,32 @@ const FilterModal = ({
                                         aria-label="filter genre select"
                                         placeholder="Select Genre"
                                         value={genre}
-                                        onChange={handleFilterChange(setGenre)}
-                                        classNames={{
-                                            base: 'mb-4',
-                                        }}
+                                        defaultSelectedKeys={[genre]}
+                                        onChange={(e) => setGenre(e.target.value)}
+                                        classNames={{ base: 'mb-4' }}
                                     >
                                         {genres.map((g) => (
-                                            <SelectItem key={g.id} value={g.name}>{g.name}</SelectItem>
+                                            <SelectItem key={g.name} value={g.name}>{g.name}</SelectItem>
                                         ))}
                                     </Select>
                                     <Select
                                         aria-label="filter format select"
                                         placeholder="Select Format"
                                         value={format}
-                                        onChange={handleFilterChange(setFormat)}
-                                        classNames={{
-                                            base: 'mb-4',
-                                        }}
+                                        defaultSelectedKeys={[format]}
+                                        onChange={(e) => setFormat(e.target.value)}
+                                        classNames={{ base: 'mb-4' }}
                                     >
                                         {formats.map((f) => (
-                                            <SelectItem key={f.id} value={f.name}>{f.name}</SelectItem>
+                                            <SelectItem key={f.name} value={f.name}>{f.name}</SelectItem>
                                         ))}
                                     </Select>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button auto onPress={onClose}>
+                                    <Button auto onPress={() => {
+                                        handleApplyFilters();
+                                        onClose();
+                                    }}>
                                         Apply Filters
                                     </Button>
                                 </ModalFooter>
@@ -118,13 +115,9 @@ const FilterModal = ({
                         )}
                     </ModalContent>
                 </Modal>
-
-
-            }
+            )}
         </>
     );
-
-
 };
 
 export default FilterModal;

@@ -51,7 +51,7 @@ const NavBar = () => {
                 {session?.user ?
                     <>
                         <NavbarItem isActive={location.pathname === "/catalog"}>
-                            <Link to="/catalog" aria-current="page">
+                            <Link to="/catalog?page=1" aria-current="page">
                                 Albums
                             </Link>
                         </NavbarItem>
