@@ -9,12 +9,13 @@ import {
     DropdownMenu,
     DropdownSection, DropdownItem
 } from "@nextui-org/react";
+import {supabase} from "../lib/helper/supabaseClient.js";
 import {HeartIcon} from "./icons/HeartIcon.jsx";
 import React, {useContext, useState} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate} from "react-router-dom";
 
-export default function AlbumCard({album}) {
+export default function AlbumCard({album, onCardDeleted}) {
     const {session, role} = useContext(SessionContext);
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate();
@@ -24,9 +25,27 @@ export default function AlbumCard({album}) {
         setLiked((prevState) => !prevState);
     }
 
+    const handleDeleteClick = async () => {
+        console.log(album.id);
+        const {data, error} = await supabase
+            .from('album')
+            .delete()
+            .eq('id', album.id)
+            .select()
+
+        if (error) {
+            console.error('Error deleting album:', error);
+        } else {
+            onCardDeleted(album);
+            console.log('Album deleted successfully:', data);
+        }
+    };
+
+
+
     return (
         <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270">
-            <CardBody className="cursor-pointer overflow-visible py-2" onClick={() => navigate('/catalog/'+album.id)}>
+            <CardBody className="cursor-pointer overflow-visible py-2" onClick={() => navigate('/catalog/' + album.id)}>
                 <Image
                     alt="Card background"
                     className="object-cover rounded-xl hover:scale-105"
@@ -103,6 +122,7 @@ export default function AlbumCard({album}) {
                                     // shortcut="⌘⇧D"
                                     description="Permanently delete the album"
                                     // startContent={<DeleteDocumentIcon className="text-danger" />}
+                                    onClick={handleDeleteClick}
                                 >
                                     Delete album
                                 </DropdownItem>

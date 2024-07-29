@@ -92,6 +92,11 @@ const CatalogPage = () => {
         navigate(`?${query.toString()}`);
     };
 
+    const onCardDeleted = (deletedAlbum) => {
+        const newAlbums = filteredAlbums.filter((album) => album !== deletedAlbum);
+        setFilteredAlbums(newAlbums);
+    }
+
     return (
         <div className="">
             <div className="flex z-20 justify-around w-full my-4">
@@ -155,7 +160,7 @@ const CatalogPage = () => {
                 {filteredAlbums.length > 0 ? (
                     <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
                         {filteredAlbums.map((album) => (
-                            <AlbumCard album={album} key={album.id} />
+                            <AlbumCard album={album} onCardDeleted={onCardDeleted}  key={album.id} />
                         ))}
                     </div>
                 ) : (
