@@ -11,6 +11,7 @@ import FavouritesPage from "./pages/FavouritesPage.jsx";
 import NavBar from "./components/NavBar.jsx";
 import MainLayout from "./components/MainLayout.jsx";
 import AlbumPage from "./pages/AlbumPage.jsx";
+import AlbumEditPage from "./pages/AlbumEditPage.jsx";
 
 export default function App() {
 
@@ -26,6 +27,10 @@ export default function App() {
         {
             path: "/catalog/:id",
             element: <MainLayout><AlbumPage/></MainLayout>
+        },
+        {
+            path: "/catalog/edit/:id",
+            element: <MainLayout><AlbumEditPage/></MainLayout>
         },
         {
             path: "/favourites",

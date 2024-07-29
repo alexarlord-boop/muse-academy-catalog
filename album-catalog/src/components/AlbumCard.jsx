@@ -21,7 +21,7 @@ export default function AlbumCard({album, onCardDeleted}) {
     const navigate = useNavigate();
 
     function handleLikeClick(event) {
-        event.stopPropagation();
+        event.stopPropagation(); // TODO:- like is not liking
         setLiked((prevState) => !prevState);
     }
 
@@ -40,6 +40,7 @@ export default function AlbumCard({album, onCardDeleted}) {
             console.log('Album deleted successfully:', data);
         }
     };
+
 
 
 
@@ -110,6 +111,7 @@ export default function AlbumCard({album, onCardDeleted}) {
                                     // shortcut="⌘⇧E"
                                     description="Allows you to edit the album"
                                     // startContent={<EditDocumentIcon />}
+                                    onClick={() => navigate('/catalog/edit/' + album.id)}
                                 >
                                     Edit album
                                 </DropdownItem>
