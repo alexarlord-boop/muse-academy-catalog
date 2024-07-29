@@ -1,35 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {supabase} from '../lib/helper/supabaseClient.js';
+import useAlbum from "../hooks/useAlbum.js";
 
 const AlbumPage = () => {
     const {id} = useParams();
-    const [album, setAlbum] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchAlbum = async () => {
-            try {
-                const {data, error} = await supabase
-                    .from('album') // Replace with your table name
-                    .select('*') // Select all columns or specify the ones you need
-                    .eq('id', id) // Filter by the album ID
-                    .single(); // Get a single row
-
-                if (error) throw error;
-
-                setAlbum(data);
-                console.log(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAlbum();
-    }, [id]);
+    const { album, loading, error } = useAlbum(id);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
