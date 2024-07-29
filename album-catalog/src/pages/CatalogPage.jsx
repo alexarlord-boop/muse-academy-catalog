@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient.js";
 import AlbumCard from "../components/AlbumCard.jsx";
 import FilterModal from "../components/FilterModal.jsx";
+import toast, { Toaster } from 'react-hot-toast';
 
 const CatalogPage = () => {
     const [albums, setAlbums] = useState([]);
@@ -17,6 +18,8 @@ const CatalogPage = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const notify = (msg) => toast(msg);
+
 
     useEffect(() => {
         const query = new URLSearchParams(location.search);
@@ -95,6 +98,7 @@ const CatalogPage = () => {
     const onCardDeleted = (deletedAlbum) => {
         const newAlbums = filteredAlbums.filter((album) => album !== deletedAlbum);
         setFilteredAlbums(newAlbums);
+        notify("Album deleted successfully");
     }
 
     return (
