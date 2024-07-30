@@ -14,11 +14,15 @@ import {HeartIcon} from "./icons/HeartIcon.jsx";
 import React, {useContext, useState} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate} from "react-router-dom";
+import {AssetIsAbsent} from "./icons/AssetIsAbsent.jsx";
+
 
 export default function AlbumCard({album, onCardDeleted}) {
     const {session, role} = useContext(SessionContext);
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate();
+
+
 
     function handleLikeClick(event) {
         event.stopPropagation(); // TODO:- like is not liking
@@ -47,13 +51,17 @@ export default function AlbumCard({album, onCardDeleted}) {
     return (
         <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270">
             <CardBody className="cursor-pointer overflow-visible py-2" onClick={() => navigate('/catalog/' + album.id)}>
-                <Image
-                    alt="Card background"
-                    className="object-cover rounded-xl hover:scale-105"
-                    src={album.image_url}
-                    width={270}
-                    height={270} // Added height to ensure consistent image size
-                />
+                {album.image_url ? (
+                    <Image
+                        alt="Card background"
+                        className="object-cover rounded-xl hover:scale-105"
+                        src={album.image_url}
+                        width={270}
+                        height={270} // Ensure consistent image size
+                    />
+                ) : (
+                    <AssetIsAbsent/>
+                )}
             </CardBody>
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                 <h4 className="font-bold text-large">{album.name}</h4>
