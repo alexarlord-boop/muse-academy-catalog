@@ -50,11 +50,11 @@ export default function AlbumCard({album, onCardDeleted}) {
 
     return (
         <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270">
-            <CardBody className="cursor-pointer overflow-visible py-2" onClick={() => navigate('/catalog/' + album.id)}>
+            <CardBody className="cursor-pointer overflow-visible py-2 hover:scale-105 ease-out duration-300" onClick={() => navigate('/catalog/' + album.id)}>
                 {album.image_url ? (
                     <Image
                         alt="Card background"
-                        className="object-cover rounded-xl hover:scale-105"
+                        className="object-cover rounded-xl"
                         src={album.image_url}
                         width={270}
                         height={270} // Ensure consistent image size
