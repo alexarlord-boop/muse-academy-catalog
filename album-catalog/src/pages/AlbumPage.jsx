@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import useAlbum from "../hooks/useAlbum.js";
 import {Spacer} from "@nextui-org/react";
 import {AssetIsAbsent} from "../components/icons/AssetIsAbsent.jsx";
 import {Button} from "@nextui-org/button";
+import {SessionContext} from "../context/SessionContext.jsx";
 
 const AlbumPage = () => {
     const {id} = useParams();
     const {album, loading, error} = useAlbum(id);
     const navigate = useNavigate();
+    const {session, role} = useContext(SessionContext);
 
 
     if (loading) return <div>Loading...</div>;
@@ -29,7 +31,7 @@ const AlbumPage = () => {
                     <p className="text-gray-700"><strong>Tracks:</strong> {album.track_number}</p>
                     <p className="text-gray-700"><strong>Format:</strong> {album.format}</p>
                     <Spacer y={10}/>
-                    <div >
+                    <div>
                         <h2 className="text-xl font-semibold">About the Album</h2>
                         <p className="text-gray-600 mt-2"><strong>Creation Info:</strong> {album.creation_info}</p>
                         <Spacer y={3}/>
@@ -38,7 +40,13 @@ const AlbumPage = () => {
                         {/*<p className="text-gray-600"><strong>Facts Info:</strong> {album.facts_info}</p>*/}
                         <Spacer y={5}/>
                     </div>
-                    <Button onClick={() => navigate('/catalog/edit/' + album.id)} className="mx-auto flex py-2">Edit</Button>
+
+                    {
+                        session?.user && role === "REDACTOR" ?
+                            <Button onClick={() => navigate('/catalog/edit/' + album.id)}
+                                    className="mx-auto flex py-2">Edit</Button>
+                            : <></>
+                    }
 
                     <Spacer y={5}/>
                 </div>

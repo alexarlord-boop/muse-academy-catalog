@@ -48,7 +48,7 @@ const NavBar = () => {
             </NavbarContent>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
 
-                {session?.user ?
+
                     <>
                         <NavbarItem isActive={location.pathname === "/catalog"}>
                             <Link to="/catalog?page=1" aria-current="page">
@@ -56,16 +56,18 @@ const NavBar = () => {
                             </Link>
                         </NavbarItem>
 
+                        {session?.user ?
                         <NavbarItem isActive={location.pathname === "/favourites"}>
                             <Link to="/favourites" aria-current="page">
                                 Favourites
                             </Link>
                         </NavbarItem>
-                    </>
-                    :
-                    <></>
+                            :
+                            <></>
 
-                }
+                        }
+                    </>
+
 
 
 
@@ -86,10 +88,10 @@ const NavBar = () => {
                     :
                     <>
                         <NavbarItem >
-                            <Link href="/login">Log in</Link>
+                            <Link to="/login">Log in</Link>
                         </NavbarItem>
                         <NavbarItem>
-                            <Link href="/signup">Sign up</Link>
+                            <Link to="/signup">Sign up</Link>
                         </NavbarItem>
                     </>
                 }

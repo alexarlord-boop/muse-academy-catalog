@@ -5,6 +5,7 @@ import {Button, ButtonGroup} from "@nextui-org/button";
 import {Input} from "@nextui-org/input";
 import {Link} from "@nextui-org/link";
 import NavBar from "../components/NavBar.jsx";
+import {Spacer} from "@nextui-org/react";
 
 
 const LoginPage = () => {
@@ -30,11 +31,13 @@ const LoginPage = () => {
     };
 
     return (
-        <>
-            <h1>Login Page</h1>
+        <div className="container w-1/2 mx-auto">
+            <Spacer y={15}/>
+            <h1 className="text-6xl">Login Page</h1>
+            <Spacer y={5}/>
             <form onSubmit={handleLogin}>
                 <div>
-                    <label>Email</label>
+
 
                     <Input
                         type="email"
@@ -44,8 +47,9 @@ const LoginPage = () => {
                     />
 
                 </div>
+                <Spacer y={5}/>
                 <div>
-                    <label>Password</label>
+
                     <Input
                         type="password"
                         label="Password"
@@ -53,13 +57,15 @@ const LoginPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                <Spacer y={5}/>
                 <Button type="submit" onClick={handleLogin}>Log in</Button>
 
             </form>
+            <Spacer y={5}/>
             <Link href="/signup" size="sm">Don't have an account? Sign up</Link>
 
             {errorMessage && <p style={{color: 'red'}}>{errorMessage}</p>}
-        </>
+        </div>
     );
 };
 
