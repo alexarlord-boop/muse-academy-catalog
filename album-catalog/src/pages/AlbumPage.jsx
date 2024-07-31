@@ -5,16 +5,38 @@ import {Spacer} from "@nextui-org/react";
 import {AssetIsAbsent} from "../components/icons/AssetIsAbsent.jsx";
 import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
+import {supabase} from "../lib/helper/supabaseClient.js";
+import toast from "react-hot-toast";
 
 const AlbumPage = () => {
     const {id} = useParams();
     const {album, loading, error} = useAlbum(id);
     const navigate = useNavigate();
     const {session, role} = useContext(SessionContext);
+    const notify = (msg) => toast(msg);
+
 
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
+
+    const handleDeleteClick = async () => {
+        console.log(album.id);
+        const {data, error} = await supabase
+            .from('album')
+            .delete()
+            .eq('id', album.id)
+            .select()
+
+        if (error) {
+            console.error('Error deleting album:', error);
+        } else {
+            // onCardDeleted(album);
+            navigate('/catalog');
+            console.log('Album deleted successfully:', data);
+            notify("Album deleted successfully");
+        }
+    };
 
     return (
         <>
@@ -43,8 +65,13 @@ const AlbumPage = () => {
 
                     {
                         session?.user && role === "REDACTOR" ?
-                            <Button onClick={() => navigate('/catalog/edit/' + album.id)}
-                                    className="mx-auto flex py-2">Edit</Button>
+                            <div className="flex flex-wrap">
+                                <Button onClick={() => navigate('/catalog/edit/' + album.id)}
+                                        className="mx-auto flex py-2">Edit</Button>
+
+                                <Button onClick={() => handleDeleteClick()}
+                                        className="mx-auto flex py-2">Delete</Button>
+                            </div>
                             : <></>
                     }
 

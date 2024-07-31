@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Input, Pagination } from '@nextui-org/react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from "../lib/helper/supabaseClient.js";
+import React, {useState, useEffect, useContext} from 'react';
+import {Input, Pagination} from '@nextui-org/react';
+import {useNavigate, useLocation} from 'react-router-dom';
+import {supabase} from "../lib/helper/supabaseClient.js";
 import AlbumCard from "../components/AlbumCard.jsx";
 import FilterModal from "../components/FilterModal.jsx";
-import toast, { Toaster } from 'react-hot-toast';
+import AddAlbumCard from "../components/AddAlbumCard.jsx"; // Import the AddAlbumCard
+import toast, {Toaster} from 'react-hot-toast';
+import {SessionContext} from "../context/SessionContext.jsx";
 
 const CatalogPage = () => {
     const [albums, setAlbums] = useState([]);
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [albumsPerPage] = useState(10); // Number of albums per page
+    const [albumsPerPage] = useState(9);
     const [filteredAlbums, setFilteredAlbums] = useState([]);
     const [genre, setGenre] = useState('');
     const [format, setFormat] = useState('');
+    const {session, role} = useContext(SessionContext);
 
     const navigate = useNavigate();
     const location = useLocation();
     const notify = (msg) => toast(msg);
-
 
     useEffect(() => {
         const query = new URLSearchParams(location.search);
@@ -28,13 +30,10 @@ const CatalogPage = () => {
         const genreParam = query.get('genre') || '';
         const formatParam = query.get('format') || '';
 
-
         setCurrentPage(page);
         setSearchTerm(search);
         setGenre(genreParam);
         setFormat(formatParam);
-
-        console.log(query.toString());
 
         handleSearch(search, page, genreParam, formatParam);
 
@@ -42,18 +41,17 @@ const CatalogPage = () => {
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1); // Reset to first page on new search term
+        setCurrentPage(1);
         updateURL(e.target.value, genre, format, 1);
     };
-
 
     const handleSearch = (search, page, genre, format) => {
         const offset = (page - 1) * albumsPerPage;
 
         let query = supabase
             .from('album')
-            .select('*', { count: 'exact' }) // Combine data fetch and count
-            .order('id', { ascending: true })
+            .select('*', {count: 'exact'})
+            .order('id', {ascending: true})
             .range(offset, offset + albumsPerPage - 1);
 
         if (search) {
@@ -66,7 +64,7 @@ const CatalogPage = () => {
             query = query.eq('format', format);
         }
 
-        query.then(({ data, count, error }) => {
+        query.then(({data, count, error}) => {
             if (error) {
                 console.error(error);
                 return;
@@ -90,8 +88,6 @@ const CatalogPage = () => {
         if (format) query.set('format', format);
         if (page) query.set('page', page);
 
-        console.log(query.toString());
-
         navigate(`?${query.toString()}`);
     };
 
@@ -99,10 +95,42 @@ const CatalogPage = () => {
         const newAlbums = filteredAlbums.filter((album) => album !== deletedAlbum);
         setFilteredAlbums(newAlbums);
         notify("Album deleted successfully");
-    }
+    };
+
+    const addSampleAlbum = async () => {
+        try {
+            var sampleAlbum = {
+                // id: ,
+                created_at: new Date().toISOString(),
+                name: 'Sample Album',
+                art_creator: 'Sample Artist',
+                issue_date: '2024-01-10',
+                track_number: 12,
+                image_url: '',
+                creation_info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+                concept_info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+                facts_info: [],
+                genre1: 'POP',
+                format: 'CD'
+            };
+            const {error} = await supabase
+                .from('album')
+                .insert([sampleAlbum]);
+
+            if (error) throw error;
+
+            // After adding the sample album, refresh the list
+            handleSearch(searchTerm, currentPage, genre, format);
+            notify("Sample album added successfully");
+
+        } catch (error) {
+            console.error('Error adding sample album:', error);
+            notify('Failed to add sample album');
+        }
+    };
 
     return (
-        <div className="">
+        <div>
             <div className="flex z-20 justify-around w-full my-4">
                 <Input
                     isClearable={true}
@@ -145,7 +173,6 @@ const CatalogPage = () => {
                 />
 
                 {filteredAlbums.length > 0 && (
-                    // TODO:- when using navbar 'Albums' -- page is not changed
                     <Pagination
                         size="sm"
                         isCompact
@@ -161,15 +188,20 @@ const CatalogPage = () => {
             </div>
 
             <div className="albums-container">
-                {filteredAlbums.length > 0 ? (
-                    <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
-                        {filteredAlbums.map((album) => (
-                            <AlbumCard album={album} onCardDeleted={onCardDeleted}  key={album.id} />
-                        ))}
-                    </div>
-                ) : (
-                    <p>No albums found</p>
-                )}
+                <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
+                    {session?.user && role === "REDACTOR" ?
+                        <AddAlbumCard onAddSampleAlbum={addSampleAlbum}/>
+                        : <></>
+                    }
+
+                    {filteredAlbums.length > 0 ? (
+                        filteredAlbums.map((album) => (
+                            <AlbumCard album={album} onCardDeleted={onCardDeleted} key={album.id}/>
+                        ))
+                    ) : (
+                        <p>No albums found</p>
+                    )}
+                </div>
             </div>
         </div>
     );
