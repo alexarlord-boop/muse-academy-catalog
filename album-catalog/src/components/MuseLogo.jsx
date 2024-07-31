@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image } from '@nextui-org/react';
-import logoSrc from '../assets/Muse_Group_logo.svg';
+// import logoSrc from '../assets/Muse_Group_logo.svg';
+import logoSrc from '../assets/Muse_Group_logo_2024.svg';
 import {useNavigate} from "react-router-dom"; // Adjust the path based on your project structure
 
 const Logo = () => {
