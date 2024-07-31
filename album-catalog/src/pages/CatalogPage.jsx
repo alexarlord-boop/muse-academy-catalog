@@ -121,7 +121,7 @@ const CatalogPage = () => {
                         innerWrapper: "bg-transparent",
                         inputWrapper: [
                             "w-1/3",
-                            "shadow-xl",
+                            "shadow-md",
                             "bg-default-200/50",
                             "dark:bg-default/60",
                             "backdrop-blur-xl",

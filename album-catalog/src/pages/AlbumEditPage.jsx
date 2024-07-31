@@ -144,8 +144,6 @@ const AlbumEditPage = () => {
                               />
                          </div>
                     </span>
-                    <Spacer y={5}/>
-
                     <Spacer y={10}/>
                     <div>
                         <h2 className="text-xl font-semibold">About the Album</h2>
@@ -176,12 +174,17 @@ const AlbumEditPage = () => {
                             />
                         </div>
 
-
+                        <Spacer y={3} />
+                        <Input
+                            name="image_url"
+                            placeholder="Enter image URL"
+                            value={formData.image_url}
+                            onChange={handleChange}
+                            className="border-black border-dashed border-1 mt-2 rounded-xl"
+                        />
                         <Spacer y={3} />
                     </div>
-                    <Spacer y={5} />
                     <Button onClick={handleSave} className="mx-auto flex py-2">Save</Button>
-                    <Spacer y={5} />
                 </div>
                 <div className="w-full md:w-1/2 px-4 flex flex-col justify-center items-center">
                     {formData.image_url ? (
@@ -193,13 +196,6 @@ const AlbumEditPage = () => {
                     ) : (
                         <AssetIsAbsent />
                     )}
-                    <Input
-                        name="image_url"
-                        placeholder="Enter image URL"
-                        value={formData.image_url}
-                        onChange={handleChange}
-                        className="border-black border-dashed border-1 mt-2 rounded-xl"
-                    />
                 </div>
             </div>
         </>
