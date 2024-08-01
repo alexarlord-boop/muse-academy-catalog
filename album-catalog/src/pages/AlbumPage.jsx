@@ -7,6 +7,7 @@ import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {supabase} from "../lib/helper/supabaseClient.js";
 import toast from "react-hot-toast";
+import {TbEdit, TbTrashX} from "react-icons/tb";
 
 const AlbumPage = () => {
     const {id} = useParams();
@@ -67,10 +68,15 @@ const AlbumPage = () => {
                         session?.user && role === "REDACTOR" ?
                             <div className="flex flex-wrap">
                                 <Button onClick={() => navigate('/catalog/edit/' + album.id)}
-                                        className="mx-auto flex py-2">Edit</Button>
+                                        className="mx-auto flex py-2"
+                                        startContent={<TbEdit />}
+                                >Edit</Button>
 
                                 <Button onClick={() => handleDeleteClick()}
-                                        className="mx-auto flex py-2">Delete</Button>
+                                        className="mx-auto flex py-2"
+                                        color="danger"
+                                        startContent={<TbTrashX />}
+                                >Delete</Button>
                             </div>
                             : <></>
                     }
