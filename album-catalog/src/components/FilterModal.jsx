@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Modal,
     ModalContent,
@@ -9,8 +9,8 @@ import {
     Select,
     SelectItem
 } from "@nextui-org/react";
-import { supabase } from "../lib/helper/supabaseClient.js";
-import { FaFilter } from "react-icons/fa6";
+import {supabase} from "../lib/helper/supabaseClient.js";
+import {FaFilter} from "react-icons/fa6";
 
 const FilterModal = ({
                          genre,
@@ -18,6 +18,7 @@ const FilterModal = ({
                          format,
                          setFormat,
                          onApplyFilters,
+                         onClearFilters,
                      }) => {
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [genres, setGenres] = useState([]);
@@ -29,13 +30,13 @@ const FilterModal = ({
         if (showFilterModal) {
             fetchGenresAndFormats();
         }
-    }, [showFilterModal]);
+    }, [showFilterModal, genre, format]);
 
     const fetchGenresAndFormats = () => {
         supabase
             .from('album_genre')
             .select('*')
-            .then(({ data, error }) => {
+            .then(({data, error}) => {
                 if (error) {
                     throw error;
                 }
@@ -48,7 +49,7 @@ const FilterModal = ({
         supabase
             .from('album_format')
             .select('*')
-            .then(({ data, error }) => {
+            .then(({data, error}) => {
                 if (error) {
                     throw error;
                 }
@@ -66,13 +67,19 @@ const FilterModal = ({
         setShowFilterModal(false);
     };
 
+    const handleClearFilters = () => {
+        onClearFilters();
+        setShowFilterModal(false);
+    }
+
     return (
         <>
             <Button size="sm" variant="bordered" onClick={() => setShowFilterModal(true)}>
-                <FaFilter />
+                <FaFilter/>
             </Button>
             {showFilterModal && (
-                <Modal portalContainer={document.getElementById('modal')} onClose={() => setShowFilterModal(false)} isOpen={showFilterModal}>
+                <Modal portalContainer={document.getElementById('modal')} onClose={() => setShowFilterModal(false)}
+                       isOpen={showFilterModal}>
                     <ModalContent>
                         {(onClose) => (
                             <>
@@ -84,7 +91,7 @@ const FilterModal = ({
                                         value={genre}
                                         defaultSelectedKeys={[genre]}
                                         onChange={(e) => setGenre(e.target.value)}
-                                        classNames={{ base: 'mb-4' }}
+                                        classNames={{base: 'mb-4'}}
                                     >
                                         {genres.map((g) => (
                                             <SelectItem key={g.name} value={g.name}>{g.name}</SelectItem>
@@ -96,7 +103,7 @@ const FilterModal = ({
                                         value={format}
                                         defaultSelectedKeys={[format]}
                                         onChange={(e) => setFormat(e.target.value)}
-                                        classNames={{ base: 'mb-4' }}
+                                        classNames={{base: 'mb-4'}}
                                     >
                                         {formats.map((f) => (
                                             <SelectItem key={f.name} value={f.name}>{f.name}</SelectItem>
@@ -108,8 +115,12 @@ const FilterModal = ({
                                         handleApplyFilters();
                                         onClose();
                                     }}>
-                                        Apply Filters
+                                        Apply
                                     </Button>
+                                    <Button color="danger" onPress={() => {
+                                        handleClearFilters();
+                                        onClose();
+                                    }}>Clear</Button>
                                 </ModalFooter>
                             </>
                         )}

@@ -172,6 +172,7 @@ const CatalogPage = () => {
                     format={format}
                     setFormat={setFormat}
                     onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
+                    onClearFilters={(genre, format) => updateURL(searchTerm, null, null, 1)}
                 />
 
                 {filteredAlbums.length > 0 && (
