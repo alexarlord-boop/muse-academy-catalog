@@ -98,7 +98,26 @@ const NavBar = () => {
 
 
             </NavbarContent>
-            <NavbarMenu></NavbarMenu>
+            <NavbarMenu>
+                <>
+                    <NavbarItem isActive={location.pathname === "/catalog"}>
+                        <Link to="/catalog?page=1" aria-current="page">
+                            Albums
+                        </Link>
+                    </NavbarItem>
+
+                    {session?.user ?
+                        <NavbarItem isActive={location.pathname === "/favourites"}>
+                            <Link to="/favourites" aria-current="page">
+                                Favourites
+                            </Link>
+                        </NavbarItem>
+                        :
+                        <></>
+
+                    }
+                </>
+            </NavbarMenu>
         </Navbar>
     );
 }

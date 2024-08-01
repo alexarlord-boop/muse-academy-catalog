@@ -95,7 +95,7 @@ const AlbumEditPage = () => {
                         onChange={handleChange}
                         className="text-6xl font-bold border-black border-dashed border-1 rounded-xl"
                     />
-                    <Spacer y={3} />
+                    <Spacer y={5} />
                     <p className="text-default-500 text-xl font-bold">{album.art_creator}</p>
                     <span>
                         <Spacer y={5}/>
@@ -104,7 +104,7 @@ const AlbumEditPage = () => {
                             name="issue_date"
                             value={formData.issue_date}
                             onChange={handleChange}
-                            className=" text-default-400"
+                            className="border-black border-dashed border-1 mt-2 rounded-xl"
                         />
                         <Spacer y={5}/>
                          <div className="flex">
@@ -182,9 +182,10 @@ const AlbumEditPage = () => {
                             onChange={handleChange}
                             className="border-black border-dashed border-1 mt-2 rounded-xl"
                         />
-                        <Spacer y={3} />
+                        <Spacer y={5} />
                     </div>
                     <Button onClick={handleSave} className="mx-auto flex py-2">Save</Button>
+                    <Spacer y={5}/>
                 </div>
                 <div className="w-full md:w-1/2 px-4 flex flex-col justify-center items-center">
                     {formData.image_url ? (

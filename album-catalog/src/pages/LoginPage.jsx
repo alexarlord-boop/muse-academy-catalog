@@ -31,7 +31,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="container w-1/2 mx-auto">
+        <div className="container md:w-1/2 sm:w-5/6 mx-auto">
             <Spacer y={15}/>
             <h1 className="text-6xl">Login Page</h1>
             <Spacer y={5}/>
