@@ -1,27 +1,32 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {Input, Pagination} from '@nextui-org/react';
-import {useNavigate, useLocation} from 'react-router-dom';
-import {supabase} from "../lib/helper/supabaseClient.js";
+import React, { useState, useEffect, useContext } from 'react';
+import { Input, Pagination } from '@nextui-org/react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from "../lib/helper/supabaseClient.js";
 import AlbumCard from "../components/AlbumCard.jsx";
 import FilterModal from "../components/FilterModal.jsx";
-import AddAlbumCard from "../components/AddAlbumCard.jsx"; // Import the AddAlbumCard
-import toast, {Toaster} from 'react-hot-toast';
-import {SessionContext} from "../context/SessionContext.jsx";
+import AddAlbumCard from "../components/AddAlbumCard.jsx";
+import toast from 'react-hot-toast';
+import { SessionContext } from "../context/SessionContext.jsx";
 
 const CatalogPage = () => {
     const [albums, setAlbums] = useState([]);
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [albumsPerPage] = useState(9);
+    const { session, role } = useContext(SessionContext);
+    const [albumsPerPage, setAlbumsPerPage] = useState(10);
     const [filteredAlbums, setFilteredAlbums] = useState([]);
     const [genre, setGenre] = useState('');
     const [format, setFormat] = useState('');
-    const {session, role} = useContext(SessionContext);
 
     const navigate = useNavigate();
     const location = useLocation();
     const notify = (msg) => toast(msg);
+
+    // TODO:- sometimes doesn't work -- session storage?
+    useEffect(() => {
+        setAlbumsPerPage(role === "REDACTOR" ? 9 : 10);
+    }, [role]);
 
     useEffect(() => {
         const query = new URLSearchParams(location.search);
@@ -36,8 +41,7 @@ const CatalogPage = () => {
         setFormat(formatParam);
 
         handleSearch(search, page, genreParam, formatParam);
-
-    }, [location.search]);
+    }, [location.search, albumsPerPage]);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -50,8 +54,8 @@ const CatalogPage = () => {
 
         let query = supabase
             .from('album')
-            .select('*', {count: 'exact'})
-            .order('id', {ascending: true})
+            .select('*', { count: 'exact' })
+            .order('id', { ascending: true })
             .range(offset, offset + albumsPerPage - 1);
 
         if (search) {
@@ -64,7 +68,7 @@ const CatalogPage = () => {
             query = query.eq('format', format);
         }
 
-        query.then(({data, count, error}) => {
+        query.then(({ data, count, error }) => {
             if (error) {
                 console.error(error);
                 return;
@@ -100,7 +104,6 @@ const CatalogPage = () => {
     const addSampleAlbum = async () => {
         try {
             var sampleAlbum = {
-                // id: ,
                 created_at: new Date().toISOString(),
                 name: 'Sample Album',
                 art_creator: 'Sample Artist',
@@ -113,16 +116,15 @@ const CatalogPage = () => {
                 genre1: 'POP',
                 format: 'CD'
             };
-            const {error} = await supabase
+            const { data, error } = await supabase
                 .from('album')
-                .insert([sampleAlbum]);
+                .insert([sampleAlbum])
+                .select();
 
             if (error) throw error;
 
-            // After adding the sample album, refresh the list
+            navigate('/catalog/edit/' + data[0].id);
             handleSearch(searchTerm, currentPage, genre, format);
-            notify("Sample album added successfully");
-
         } catch (error) {
             console.error('Error adding sample album:', error);
             notify('Failed to add sample album');
