@@ -49,8 +49,8 @@ export default function AlbumCard({album, onCardDeleted}) {
 
 
     return (
-        <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270 ">
-            <CardBody className="overflow-visible cursor-pointer min-h-[230px] py-2 hover:scale-105 ease-out duration-300" onClick={() => navigate('/catalog/' + album.id)}>
+        <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270">
+            <CardBody className="overflow-visible cursor-pointer  py-2 hover:scale-105 ease-out duration-300" onClick={() => navigate('/catalog/' + album.id)}>
                 {album.image_url ? (
                     <Image
                         alt="Card background"
@@ -71,18 +71,20 @@ export default function AlbumCard({album, onCardDeleted}) {
                     <small className="text-default-400">{album.issue_date.split('-')[0]} ● </small>
                     <small className="text-default-400">{album.genre1}</small>
                 </span>
-                <Button
-                    isIconOnly
-                    className="text-red-600 data-[hover]:bg-red-100 absolute bottom-2 right-2"
-                    radius="full"
-                    variant="light"
-                    onPress={(e) => handleLikeClick(e)}
-                >
-                    <HeartIcon
-                        className={liked ? "[&>path]:stroke-transparent" : ""}
-                        fill={liked ? "currentColor" : "none"}
-                    />
-                </Button>
+                {
+                    session?.user && <Button
+                        isIconOnly
+                        className="text-red-600 data-[hover]:bg-red-100 absolute bottom-2 right-2"
+                        radius="full"
+                        variant="light"
+                        onPress={(e) => handleLikeClick(e)}
+                    >
+                        <HeartIcon
+                            className={liked ? "[&>path]:stroke-transparent" : ""}
+                            fill={liked ? "currentColor" : "none"}
+                        />
+                    </Button>
+                }
 
                 {session?.user && role === "REDACTOR" &&
                     <Dropdown
