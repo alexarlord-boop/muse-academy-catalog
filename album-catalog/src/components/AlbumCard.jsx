@@ -22,8 +22,6 @@ export default function AlbumCard({album, onCardDeleted}) {
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate();
 
-
-
     function handleLikeClick(event) {
         event.stopPropagation(); // TODO:- like is not liking
         setLiked((prevState) => !prevState);
@@ -49,12 +47,12 @@ export default function AlbumCard({album, onCardDeleted}) {
 
 
     return (
-        <Card key={album.id} className="py-4 my-1 border-2 border-transparent hover:border-gray-900 w-270">
-            <CardBody className="overflow-visible cursor-pointer  py-2 hover:scale-105 ease-out duration-300" onClick={() => navigate('/catalog/' + album.id)}>
+        <Card key={album.id} className=" max-h-[340px]  border-transparent hover:border-gray-900 w-270">
+            <CardBody className="p-0 m-0 overflow-visible cursor-pointer hover:scale-105 ease-out duration-300" onClick={() => navigate('/catalog/' + album.id)}>
                 {album.image_url ? (
                     <Image
                         alt="Card background"
-                        className="object-cover rounded-xl"
+                        className="object-cover rounded-xs"
                         src={album.image_url}
                         width={270}
                         height={270} // Ensure consistent image size
@@ -63,7 +61,7 @@ export default function AlbumCard({album, onCardDeleted}) {
                     <AssetIsAbsent/>
                 )}
             </CardBody>
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+            <CardHeader className=" px-4 flex-col items-start">
                 <h4 className="font-bold text-large">{album.name}</h4>
                 <p className="text-default-400 uppercase font-bold">{album.art_creator}</p>
 
@@ -89,7 +87,6 @@ export default function AlbumCard({album, onCardDeleted}) {
                 {session?.user && role === "REDACTOR" &&
                     <Dropdown
                         showArrow
-                        // backdrop="blur"
                         classNames={{
                             base: "before:bg-default-900", // change arrow background
                             content: "p-0 border-small border-divider bg-background border-gray-900",
@@ -107,20 +104,9 @@ export default function AlbumCard({album, onCardDeleted}) {
                         </DropdownTrigger>
                         <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
                             <DropdownSection title="" showDivider>
-
-                                {/*<Dropdown.Item*/}
-                                {/*    key="copy"*/}
-                                {/*    shortcut="⌘C"*/}
-                                {/*    description="Copy the file link"*/}
-                                {/*    startContent={<CopyDocumentIcon />}*/}
-                                {/*>*/}
-                                {/*    Copy link*/}
-                                {/*</Dropdown.Item>*/}
                                 <DropdownItem
                                     key="edit"
-                                    // shortcut="⌘⇧E"
                                     description="Allows you to edit the album"
-                                    // startContent={<EditDocumentIcon />}
                                     onClick={() => navigate('/catalog/edit/' + album.id)}
                                 >
                                     Edit album
@@ -131,9 +117,7 @@ export default function AlbumCard({album, onCardDeleted}) {
                                     key="delete"
                                     className="text-danger"
                                     color="danger"
-                                    // shortcut="⌘⇧D"
                                     description="Permanently delete the album"
-                                    // startContent={<DeleteDocumentIcon className="text-danger" />}
                                     onClick={handleDeleteClick}
                                 >
                                     Delete album
