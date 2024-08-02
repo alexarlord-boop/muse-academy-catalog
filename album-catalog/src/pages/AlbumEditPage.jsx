@@ -95,10 +95,10 @@ const AlbumEditPage = () => {
                         onChange={handleChange}
                         className="text-6xl font-bold border-black border-dashed border-1 rounded-xl"
                     />
-                    <Spacer y={5} />
+                    <Spacer y={3} />
                     <p className="text-default-500 text-xl font-bold">{album.art_creator}</p>
                     <span>
-                        <Spacer y={5}/>
+
                         <Input
                             type="date"
                             name="issue_date"
@@ -106,7 +106,7 @@ const AlbumEditPage = () => {
                             onChange={handleChange}
                             className="border-black border-dashed border-1 mt-2 rounded-xl"
                         />
-                        <Spacer y={5}/>
+                        <Spacer y={3}/>
                          <div className="flex">
                              <select
                                  name="format"
@@ -144,7 +144,7 @@ const AlbumEditPage = () => {
                               />
                          </div>
                     </span>
-                    <Spacer y={10}/>
+                    <Spacer y={5}/>
                     <div>
                         <h2 className="text-xl font-semibold">About the Album</h2>
                         <Spacer y={2}/>
