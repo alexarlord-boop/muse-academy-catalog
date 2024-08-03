@@ -7,8 +7,8 @@ export default function CatalogToolbar({
                                            searchTerm,
                                            updateURL,
                                            genre,
-                                           setGenre,
                                            format,
+                                           setGenre,
                                            setFormat,
                                        }) {
     return (

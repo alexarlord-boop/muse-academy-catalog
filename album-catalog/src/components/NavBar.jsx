@@ -13,8 +13,7 @@ import MuseLogo from "./MuseLogo.jsx";
 import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
-import {Avatar, AvatarGroup, AvatarIcon} from "@nextui-org/avatar";
-// import {Link} from "@nextui-org/link";  -- causing navbar rerender
+import {Avatar} from "@nextui-org/avatar";
 import {Link} from "react-router-dom";
 
 
