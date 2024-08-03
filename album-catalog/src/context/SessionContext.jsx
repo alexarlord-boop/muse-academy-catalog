@@ -64,13 +64,25 @@ export const SessionProvider = ({children}) => {
                 email,
                 password,
             });
+            console.log(data.user.id);
 
             if (error) {
                 console.error('Error signing up:', error);
                 return { success: false, message: error.message };
             } else {
-                console.log('Signed up successfully:', data);
-                setSession(data.session);
+
+
+                const userId = data.user.id
+                const { error: userRoleError } = await supabase
+                    .from('user_role')
+                    .insert([{ user_id: userId, role_name: "VISITOR" }])
+
+                if (userRoleError) {
+                    throw userRoleError
+                }
+
+                setSession(data.user.session);
+                setRole("VISITOR");
                 return { success: true, message: 'Signed up successfully' };
             }
         } catch (error) {

@@ -1,6 +1,7 @@
 import SearchInput from "./SearchInput.jsx";
 import FilterModal from "./FilterModal.jsx";
 
+// TODO:- put it to header
 export default function CatalogToolbar({
                                            onSearchChange,
                                            searchTerm,

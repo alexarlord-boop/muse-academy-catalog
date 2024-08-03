@@ -7,7 +7,7 @@ import {
     NavbarMenu,
     NavbarMenuItem
 } from "@nextui-org/navbar";
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import MuseLogo from "./MuseLogo.jsx";
 
 import {Button} from "@nextui-org/button";
@@ -15,16 +15,14 @@ import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
 import {Avatar, AvatarGroup, AvatarIcon} from "@nextui-org/avatar";
 // import {Link} from "@nextui-org/link";  -- causing navbar rerender
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
-
-const NavBar = () => {
+function NavBar() {
     const {session, role} = useContext(SessionContext);
     const {logOut} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
-
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -36,7 +34,8 @@ const NavBar = () => {
 
 
     return (
-        <Navbar className="" maxWidth="2xl" isBlurred={true} isBordered={true} disableAnimation={false} onMenuOpenChange={setIsMenuOpen}>
+        <Navbar className="" maxWidth="2xl" isBlurred={true} isBordered={true} disableAnimation={false}
+                onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -49,27 +48,24 @@ const NavBar = () => {
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
 
 
-                    <>
-                        <NavbarItem isActive={location.pathname === "/catalog"}>
-                            <Link to="/catalog?page=1" aria-current="page">
-                                Albums
-                            </Link>
-                        </NavbarItem>
+                <>
+                    <NavbarItem isActive={location.pathname === "/catalog"}>
+                        <Link to="/catalog?page=1" aria-current="page">
+                            Albums
+                        </Link>
+                    </NavbarItem>
 
-                        {session?.user ?
+                    {session?.user ?
                         <NavbarItem isActive={location.pathname === "/favourites"}>
                             <Link to="/favourites" aria-current="page">
                                 Favourites
                             </Link>
                         </NavbarItem>
-                            :
-                            <></>
+                        :
+                        <></>
 
-                        }
-                    </>
-
-
-
+                    }
+                </>
 
 
             </NavbarContent>
@@ -83,11 +79,11 @@ const NavBar = () => {
                                 Log out
                             </Button>
                         </NavbarItem>
-                        <Avatar name={session.user.email} isBordered radius="lg" />
+                        <Avatar name={session.user.email} isBordered radius="lg"/>
                     </>
                     :
                     <>
-                        <NavbarItem >
+                        <NavbarItem>
                             <Link to="/login">Log in</Link>
                         </NavbarItem>
                         <NavbarItem>

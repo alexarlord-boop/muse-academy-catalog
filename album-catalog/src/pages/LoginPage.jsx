@@ -4,7 +4,6 @@ import {useNavigate} from "react-router-dom";
 import {Button, ButtonGroup} from "@nextui-org/button";
 import {Input} from "@nextui-org/input";
 import {Link} from "@nextui-org/link";
-import NavBar from "../components/NavBar.jsx";
 import {Spacer} from "@nextui-org/react";
 
 
@@ -12,8 +11,6 @@ const LoginPage = () => {
     const {logIn} = useContext(SessionContext);
     const [email, setEmail] = useState('redactor@gmail.com');
     const [password, setPassword] = useState('11112222');
-    // const [email, setEmail] = useState('visitor@gmail.com');
-    // const [password, setPassword] = useState('11112222');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
