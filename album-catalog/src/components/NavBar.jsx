@@ -22,19 +22,15 @@ import {FaCube, FaPlus} from "react-icons/fa";
 import useSampleAlbum from "../hooks/useSampleAlbum.js";
 import {BsGrid} from "react-icons/bs";
 import MediaQuery from "./MediaQuery.jsx";
+import UserProfile from "./UserProfile.jsx";
 
 
 const NavBar = () => {
     const {session, role} = useContext(SessionContext);
-    const {logOut} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLogout = async (e) => {
-        e.preventDefault();
-        await logOut();
-        navigate("/login")
-    };
+
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const {
@@ -53,16 +49,11 @@ const NavBar = () => {
         <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true} disableanimation={false}
                 onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
-                <div className="flex items-center cursor-pointer" onClick={() => navigate("/catalog")}>
-                    <NavbarMenuToggle
-                        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                        className="sm:hidden"
-                    />
+
+                <MediaQuery min="md">
                     <NavbarBrand className="ml-2">
                         <MuseLogo/>
                     </NavbarBrand>
-                </div>
-                <MediaQuery min="md">
                     <NavbarContent>
 
                         <Button variant="bordered" onClick={() => navigate("/catalog")}>
@@ -102,43 +93,8 @@ const NavBar = () => {
                 </MediaQuery>
 
 
-                {session?.user
-                    ? <NavbarContent as="div" justify="end">
-                        <Dropdown placement="bottom-end">
-                            <DropdownTrigger>
-                                <Avatar
-                                    isBordered
-                                    as="button"
-                                    className="transition-transform"
-                                    color="secondary"
-                                    name="Jason Hughes"
-                                    size="sm"
-                                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                                />
-                            </DropdownTrigger>
-                            <DropdownMenu aria-label="Profile Actions" variant="flat">
-                                <DropdownItem key="profile" className="h-14 gap-2">
-                                    <p className="font-semibold">Signed in as</p>
-                                    <p className="font-semibold">{session.user.email}</p>
-                                </DropdownItem>
-                                <DropdownItem key="favourites" onClick={() => navigate("/favourites")}>My
-                                    Favourites</DropdownItem>
-                                <DropdownItem key="settings">My Settings</DropdownItem>
-                                <DropdownItem key="logout" color="danger" onClick={handleLogout}>
-                                    Log Out
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </NavbarContent>
-                    : <NavbarContent as="div" justify="end">
-                        <NavbarItem>
-                            <Link to="/login">Log in</Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Link to="/signup">Sign up</Link>
-                        </NavbarItem>
-                    </NavbarContent>
-                }
+                <UserProfile/>
+
 
             </NavbarContent>
             <NavbarMenu>
