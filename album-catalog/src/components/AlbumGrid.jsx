@@ -10,15 +10,15 @@ export default function AlbumGrid({ session, role, filteredAlbums, setFilteredAl
     const onCardDeleted = (deletedAlbum) => {
         const newAlbums = filteredAlbums.filter((album) => album !== deletedAlbum);
         setFilteredAlbums(newAlbums);
-        notify("Album deleted successfully");
+        notify("Album deleted");
     };
 
     return (
 
         <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
-            {session?.user && role === "REDACTOR" && (
-                <AddAlbumCard onAddSampleAlbum={addSampleAlbum} />
-            )}
+            {/*{session?.user && role === "REDACTOR" && (*/}
+            {/*    <AddAlbumCard onAddSampleAlbum={addSampleAlbum} />*/}
+            {/*)}*/}
 
             {filteredAlbums.length > 0 ? (
                 filteredAlbums.map((album) => (

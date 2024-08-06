@@ -74,7 +74,7 @@ const FilterModal = ({
 
     return (
         <>
-            <Button className="absolute right-5" size="sm" variant="bordered" onClick={() => setShowFilterModal(true)}>
+            <Button className=""  variant="bordered" onClick={() => setShowFilterModal(true)}>
                 <FaFilter/>
             </Button>
             {showFilterModal && (

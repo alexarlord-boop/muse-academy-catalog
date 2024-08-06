@@ -31,11 +31,10 @@ const useSampleAlbum = (handleSearch, searchTerm, currentPage, genre, format) =>
             if (error) throw error;
 
             navigate('/catalog/edit/' + data[0].id);
-            handleSearch(searchTerm, currentPage, genre, format);
-            notify('Sample album added successfully');
+
         } catch (error) {
             console.error('Error adding sample album:', error);
-            notify('Failed to add sample album');
+            notify('Failed to add album');
         }
     }, [handleSearch, searchTerm, currentPage, genre, format, navigate]);
 

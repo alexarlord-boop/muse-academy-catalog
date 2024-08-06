@@ -7,20 +7,20 @@ import useCatalog from "../hooks/useCatalog.js";
 
 const CatalogPage = () => {
     const {
-        albumsNumber,
+        handleSearchChange,
         searchTerm,
+        setSearchTerm,
+        updateURL,
+        genre,
+        setGenre,
+        format,
+        setFormat,
+        albumsNumber,
         currentPage,
         albumsPerPage,
         filteredAlbums,
         setFilteredAlbums,
-        genre,
-        format,
-        setSearchTerm,
-        setGenre,
-        setFormat,
-        handleSearchChange,
         handlePageChange,
-        updateURL,
         session,
         role
     } = useCatalog();

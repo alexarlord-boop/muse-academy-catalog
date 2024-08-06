@@ -13,21 +13,21 @@ export default function CatalogToolbar({
                                        }) {
     return (
         <div className="flex z-20 justify-around w-full my-2">
-            <SearchInput
-                searchTerm={searchTerm}
-                onSearchChange={onSearchChange}
-                updateURL={updateURL}
-                genre={genre}
-                format={format}
-            />
-            <FilterModal
-                genre={genre}
-                setGenre={setGenre}
-                format={format}
-                setFormat={setFormat}
-                onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
-                onClearFilters={() => updateURL(searchTerm, null, null, 1)}
-            />
+            {/*<SearchInput*/}
+            {/*    searchTerm={searchTerm}*/}
+            {/*    onSearchChange={onSearchChange}*/}
+            {/*    updateURL={updateURL}*/}
+            {/*    genre={genre}*/}
+            {/*    format={format}*/}
+            {/*/>*/}
+            {/*<FilterModal*/}
+            {/*    genre={genre}*/}
+            {/*    setGenre={setGenre}*/}
+            {/*    format={format}*/}
+            {/*    setFormat={setFormat}*/}
+            {/*    onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}*/}
+            {/*    onClearFilters={() => updateURL(searchTerm, null, null, 1)}*/}
+            {/*/>*/}
 
         </div>
     );

@@ -31,14 +31,7 @@ const useCatalog = () => {
         handleSearch(search, page, genreParam, formatParam);
     }, [location.search, albumsPerPage]);
 
-    useLayoutEffect(() => {
-        if (role === 'REDACTOR') {
-            setAlbumsPerPage(9);
-        }
-        if (role === 'VISITOR') {
-            setAlbumsPerPage(10);
-        }
-    }, [role]);
+
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
