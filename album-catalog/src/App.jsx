@@ -15,6 +15,8 @@ import AlbumEditPage from "./pages/AlbumEditPage.jsx";
 
 export default function App() {
 
+    // TODO:- add breadcrumbs for pages (except catalog)
+    // TODO:- dark theme styles?
     const router = createBrowserRouter([
         {
             path: "/",

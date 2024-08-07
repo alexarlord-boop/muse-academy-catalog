@@ -39,6 +39,9 @@ const CatalogPage = () => {
                 setFormat={setFormat}
             />
 
+            {/*TODO:- add deletion modal window for confirmation*/}
+            {/*TODO:- fix car name spacing, font sizes (desk/mobile)*/}
+            {/*TODO:- more filter options (year)*/}
             <AlbumGrid
                 session={session}
                 role={role}
@@ -47,6 +50,8 @@ const CatalogPage = () => {
                 addSampleAlbum={addSampleAlbum}
             />
 
+            {/*TODO:- pagination togle is bugged when search is changed*/}
+            {/*TODO:- 2nd page, go to catalog init -- same togle*/}
             <CatalogPagination
                 albumsNumber={albumsNumber}
                 albumsPerPage={albumsPerPage}

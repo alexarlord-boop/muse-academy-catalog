@@ -39,6 +39,7 @@ const AlbumPage = () => {
         }
     };
 
+    // TODO:- deletion modal confirmation (same)
     return (
         <>
             <div className="flex flex-wrap mx-auto p-6 bg-white">

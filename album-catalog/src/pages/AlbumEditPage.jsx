@@ -84,6 +84,7 @@ const AlbumEditPage = () => {
     if (formatsError) return <div>Error loading formats: {formatsError}</div>;
     if (genresError) return <div>Error loading genres: {genresError}</div>;
 
+    // TODO:- creation via draft-publish
     return (
         <>
             <div className="flex flex-wrap mx-auto p-6 bg-white">
