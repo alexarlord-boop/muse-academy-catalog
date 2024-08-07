@@ -24,12 +24,11 @@ const LoginPage = () => {
         const response = await signUp(email, password);
 
         if (response.success) {
-            // TODO:- navbar is not updated after registration
-            navigate('/login');
-            notify('Sign up successfully');
+            navigate('/catalog');
+            navigate(0);
         } else {
             setErrorMessage(response.message);
-            notify('Error ocurred while signing up');
+            notify('Error occurred while signing up');
         }
 
     };
