@@ -4,6 +4,8 @@ import {Avatar} from "@nextui-org/avatar";
 import {Link, useNavigate} from "react-router-dom";
 import React, {useContext} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
+import {CiDark, CiHeart} from "react-icons/ci";
+import {HiOutlineCog8Tooth} from "react-icons/hi2";
 
 
 const UserProfile = () => {
@@ -37,9 +39,13 @@ const UserProfile = () => {
                             <p className="font-semibold">Signed in as</p>
                             <p className="font-semibold">{session.user.email}</p>
                         </DropdownItem>
-                        <DropdownItem key="favourites" onClick={() => navigate("/favourites")}>My
-                            Favourites</DropdownItem>
-                        <DropdownItem key="settings">My Settings</DropdownItem>
+                        <DropdownItem key="favourites" startContent={<CiHeart/>} onClick={() => navigate("/favourites")}>My
+                            Favourites
+                        </DropdownItem>
+                        <DropdownItem startContent={<CiDark />}>
+                            Toggle theme
+                        </DropdownItem>
+                        <DropdownItem key="settings" startContent={<HiOutlineCog8Tooth />}>My Settings</DropdownItem>
                         <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                             Log Out
                         </DropdownItem>

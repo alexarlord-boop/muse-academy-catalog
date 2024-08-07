@@ -70,8 +70,6 @@ export const SessionProvider = ({children}) => {
                 console.error('Error signing up:', error);
                 return { success: false, message: error.message };
             } else {
-
-
                 const userId = data.user.id
                 const { error: userRoleError } = await supabase
                     .from('user_role')

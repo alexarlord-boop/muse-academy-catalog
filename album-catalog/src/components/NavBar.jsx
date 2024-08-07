@@ -11,16 +11,13 @@ import MuseLogo from "./MuseLogo.jsx";
 import {Button, ButtonGroup} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
-import {Avatar} from "@nextui-org/avatar";
 import {Link} from "react-router-dom";
 import useCatalog from "../hooks/useCatalog.js";
 import SearchInput from "./SearchInput.jsx";
 import FilterModal from "./FilterModal.jsx";
-import {Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@nextui-org/react";
-import {FaCubesStacked, FaFilter} from "react-icons/fa6";
-import {FaCube, FaPlus} from "react-icons/fa";
+
+import {FaPlus} from "react-icons/fa";
 import useSampleAlbum from "../hooks/useSampleAlbum.js";
-import {BsGrid} from "react-icons/bs";
 import MediaQuery from "./MediaQuery.jsx";
 import UserProfile from "./UserProfile.jsx";
 
@@ -29,7 +26,6 @@ const NavBar = () => {
     const {session, role} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
-
 
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -51,18 +47,13 @@ const NavBar = () => {
             <NavbarContent>
 
                 <MediaQuery min="md">
-                    <NavbarBrand className="ml-2">
+                    <NavbarBrand className="cursor-pointer " onClick={() => navigate("/catalog")}>
                         <MuseLogo/>
                     </NavbarBrand>
-                    <NavbarContent>
 
-                        <Button variant="bordered" onClick={() => navigate("/catalog")}>
-                            <BsGrid/>
-                        </Button>
+                    <NavbarContent className=""></NavbarContent>
 
-                    </NavbarContent>
-                    <NavbarContent as="div" className="">
-
+                    <NavbarContent className="">
                         <ButtonGroup>
                             <SearchInput
                                 searchTerm={searchTerm}
@@ -81,14 +72,15 @@ const NavBar = () => {
                                 onClearFilters={() => updateURL(searchTerm, null, null, 1)}
                             />
                         </ButtonGroup>
-
-
                     </NavbarContent>
                     <NavbarContent>
+                        {
+                            session?.user && role === "REDACTOR" &&
+                            <Button className="" variant="bordered" onClick={() => addSampleAlbum()}>
+                                <FaPlus/>
+                            </Button>
 
-                        <Button className="" variant="bordered" onClick={() => addSampleAlbum()}>
-                            <FaPlus/>
-                        </Button>
+                        }
                     </NavbarContent>
                 </MediaQuery>
 
