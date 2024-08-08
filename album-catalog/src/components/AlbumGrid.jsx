@@ -1,9 +1,8 @@
 import React from "react";
 import AlbumCard from "./AlbumCard";
-import AddAlbumCard from "./AddAlbumCard.jsx";
 import toast from "react-hot-toast";
 
-export default function AlbumGrid({ session, role, filteredAlbums, setFilteredAlbums, addSampleAlbum }) {
+export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
 
     const notify = (msg) => toast(msg);
 
@@ -15,13 +14,10 @@ export default function AlbumGrid({ session, role, filteredAlbums, setFilteredAl
 
     return (
 
-        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
-            {/*{session?.user && role === "REDACTOR" && (*/}
-            {/*    <AddAlbumCard onAddSampleAlbum={addSampleAlbum} />*/}
-            {/*)}*/}
-
+        <div className="mt-3 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
             {filteredAlbums.length > 0 ? (
                 filteredAlbums.map((album) => (
+                    // TODO:- refactor card styles
                     <AlbumCard album={album} onCardDeleted={onCardDeleted} key={album.id} />
                 ))
             ) : (

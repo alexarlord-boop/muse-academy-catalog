@@ -6,14 +6,6 @@ import useCatalog from "../hooks/useCatalog.js";
 
 const CatalogPage = () => {
     const {
-        handleSearchChange,
-        searchTerm,
-        setSearchTerm,
-        updateURL,
-        genre,
-        setGenre,
-        format,
-        setFormat,
         albumsNumber,
         currentPage,
         albumsPerPage,
@@ -32,11 +24,8 @@ const CatalogPage = () => {
             {/*TODO:- fix car name spacing, font sizes (desk/mobile)*/}
             {/*TODO:- more filter options (year)*/}
             <AlbumGrid
-                session={session}
-                role={role}
                 filteredAlbums={filteredAlbums}
                 setFilteredAlbums={setFilteredAlbums}
-                addSampleAlbum={addSampleAlbum}
             />
 
             {/*TODO:- pagination togle is bugged when search is changed*/}
