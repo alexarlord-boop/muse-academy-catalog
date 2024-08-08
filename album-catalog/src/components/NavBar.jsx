@@ -40,6 +40,8 @@ const NavBar = () => {
     } = useCatalog();
 
     const {addSampleAlbum} = useSampleAlbum();
+    const pathsToExclude = ['/login', '/signup'];
+    console.log(location.pathname);
 
     return (
         <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true} disableanimation={false}
@@ -51,37 +53,40 @@ const NavBar = () => {
                         <MuseLogo/>
                     </NavbarBrand>
 
-                    <NavbarContent className=""></NavbarContent>
+                    {!pathsToExclude.includes(location.pathname) &&
+                        <>
+                            <NavbarContent className=""></NavbarContent>
+                            <NavbarContent className="">
+                                <ButtonGroup>
+                                    <SearchInput
+                                        searchTerm={searchTerm}
+                                        onSearchChange={handleSearchChange}
+                                        updateURL={updateURL}
+                                        genre={genre}
+                                        format={format}
+                                    />
 
-                    <NavbarContent className="">
-                        <ButtonGroup>
-                            <SearchInput
-                                searchTerm={searchTerm}
-                                onSearchChange={handleSearchChange}
-                                updateURL={updateURL}
-                                genre={genre}
-                                format={format}
-                            />
+                                    <FilterModal
+                                        genre={genre}
+                                        setGenre={setGenre}
+                                        format={format}
+                                        setFormat={setFormat}
+                                        onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
+                                        onClearFilters={() => updateURL(searchTerm, null, null, 1)}
+                                    />
+                                </ButtonGroup>
+                            </NavbarContent>
+                            <NavbarContent>
+                                {
+                                    session?.user && role === "REDACTOR" &&
+                                    <Button className="" variant="bordered" onClick={() => addSampleAlbum()}>
+                                        <FaPlus/>
+                                    </Button>
 
-                            <FilterModal
-                                genre={genre}
-                                setGenre={setGenre}
-                                format={format}
-                                setFormat={setFormat}
-                                onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
-                                onClearFilters={() => updateURL(searchTerm, null, null, 1)}
-                            />
-                        </ButtonGroup>
-                    </NavbarContent>
-                    <NavbarContent>
-                        {
-                            session?.user && role === "REDACTOR" &&
-                            <Button className="" variant="bordered" onClick={() => addSampleAlbum()}>
-                                <FaPlus/>
-                            </Button>
-
-                        }
-                    </NavbarContent>
+                                }
+                            </NavbarContent>
+                        </>
+                    }
                 </MediaQuery>
 
 
