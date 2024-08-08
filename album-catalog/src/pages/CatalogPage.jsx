@@ -1,5 +1,4 @@
 import React from 'react';
-import CatalogToolbar from '../components/CatalogToolbar.jsx';
 import CatalogPagination from '../components/CatalogPagination.jsx';
 import AlbumGrid from '../components/AlbumGrid.jsx';
 import useSampleAlbum from '../hooks/useSampleAlbum.js';
@@ -29,16 +28,6 @@ const CatalogPage = () => {
 
     return (
         <>
-            <CatalogToolbar
-                onSearchChange={handleSearchChange}
-                searchTerm={searchTerm}
-                updateURL={updateURL}
-                genre={genre}
-                setGenre={setGenre}
-                format={format}
-                setFormat={setFormat}
-            />
-
             {/*TODO:- add deletion modal window for confirmation*/}
             {/*TODO:- fix car name spacing, font sizes (desk/mobile)*/}
             {/*TODO:- more filter options (year)*/}
