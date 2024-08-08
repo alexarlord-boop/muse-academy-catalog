@@ -1,7 +1,6 @@
 import React from 'react';
 import CatalogPagination from '../components/CatalogPagination.jsx';
 import AlbumGrid from '../components/AlbumGrid.jsx';
-import useSampleAlbum from '../hooks/useSampleAlbum.js';
 import useCatalog from "../hooks/useCatalog.js";
 
 const CatalogPage = () => {
@@ -12,11 +11,7 @@ const CatalogPage = () => {
         filteredAlbums,
         setFilteredAlbums,
         handlePageChange,
-        session,
-        role
     } = useCatalog();
-
-    const { addSampleAlbum } = useSampleAlbum();
 
     return (
         <>
