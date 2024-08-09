@@ -29,7 +29,7 @@ const useCatalog = () => {
         setFormat(formatParam);
 
         handleSearch(search, page, genreParam, formatParam);
-    }, [location.search, albumsPerPage]);
+    }, [location.search]);
 
 
 
@@ -66,6 +66,7 @@ const useCatalog = () => {
                 }
                 setFilteredAlbums(data);
                 setAlbumsNumber(count);
+                setCurrentPage(1);
             })
             .catch((error) => {
                 console.error(error);
@@ -91,6 +92,7 @@ const useCatalog = () => {
         albumsNumber,
         searchTerm,
         currentPage,
+        setCurrentPage,
         albumsPerPage,
         filteredAlbums,
         setFilteredAlbums,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import CatalogPagination from '../components/CatalogPagination.jsx';
 import AlbumGrid from '../components/AlbumGrid.jsx';
 import useCatalog from "../hooks/useCatalog.js";
@@ -11,8 +11,11 @@ const CatalogPage = () => {
         filteredAlbums,
         setFilteredAlbums,
         handlePageChange,
+
     } = useCatalog();
 
+
+    // TODO:- make compound component for catalog, shared state via custom hook
     return (
         <>
             {/*TODO:- add deletion modal window for confirmation*/}

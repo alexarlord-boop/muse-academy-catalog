@@ -41,10 +41,8 @@ const NavBar = () => {
 
     const {addSampleAlbum} = useSampleAlbum();
     const pathsToExclude = ['/login', '/signup'];
-    console.log(location.pathname);
-
     return (
-        <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true} disableanimation={false}
+        <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
 
