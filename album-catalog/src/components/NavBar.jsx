@@ -47,7 +47,7 @@ const NavBar = () => {
             <NavbarContent>
 
                 <MediaQuery min="md">
-                    <NavbarBrand className="cursor-pointer " onClick={() => {navigate("/catalog?page=1");window.location.reload();}}>
+                    <NavbarBrand className="cursor-pointer " onClick={() => {navigate("/catalog?page=1");}}>
                         <MuseLogo/>
                     </NavbarBrand>
 
@@ -76,7 +76,7 @@ const NavBar = () => {
                             <NavbarContent>
                                 {
                                     session?.user && role === "REDACTOR" &&
-                                    <Button className="" variant="bordered" onClick={() => addSampleAlbum()}>
+                                    <Button className="" variant="bordered" color="danger" isIconOnly={true} onClick={() => addSampleAlbum()}>
                                         <FaPlus/>
                                     </Button>
 
