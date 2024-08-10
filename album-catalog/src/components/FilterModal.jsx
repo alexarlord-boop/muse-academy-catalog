@@ -23,8 +23,6 @@ const FilterModal = ({
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [genres, setGenres] = useState([]);
     const [formats, setFormats] = useState([]);
-    const [deferredGenre, setDeferredGenre] = useState(genre);
-    const [deferredFormat, setDeferredFormat] = useState(format);
 
     useEffect(() => {
         if (showFilterModal) {
@@ -61,8 +59,6 @@ const FilterModal = ({
     };
 
     const handleApplyFilters = () => {
-        // setGenre(deferredGenre);
-        // setFormat(deferredFormat);
         onApplyFilters(genre, format);
         setShowFilterModal(false);
     };
@@ -74,7 +70,7 @@ const FilterModal = ({
 
     return (
         <>
-            <Button className=""  variant="bordered" onClick={() => setShowFilterModal(true)}>
+            <Button className=""  variant="bordered" isIconOnly={true} onClick={() => setShowFilterModal(true)}>
                 <FaFilter/>
             </Button>
             {showFilterModal && (

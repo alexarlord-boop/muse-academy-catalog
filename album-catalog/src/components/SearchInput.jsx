@@ -1,15 +1,15 @@
 import {Input} from "@nextui-org/input";
 import useCatalog from "../hooks/useCatalog.js";
-import {FaFilter} from "react-icons/fa6";
 import {Button} from "@nextui-org/react";
 import React from "react";
-import {CiSearch} from "react-icons/ci";
 import {ButtonGroup} from "@nextui-org/button";
+import {FaSearch} from "react-icons/fa";
 
 export default function SearchInput() {
     const {
         handleSearchChange,
         handleSearch,
+        setCurrentPage,
         searchTerm,
         updateURL,
         genre,
@@ -41,10 +41,9 @@ export default function SearchInput() {
                 placeholder="Search..."
             />
             <Button className="" variant="bordered" isIconOnly={true} onClick={() => {
-                handleSearch(searchTerm, 1, genre, format);
                 updateURL(searchTerm, genre, format, 1);
             }}>
-                <CiSearch/>
+                <FaSearch/>
             </Button>
         </ButtonGroup>
 
