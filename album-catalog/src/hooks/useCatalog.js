@@ -39,7 +39,7 @@ const useCatalog = () => {
     };
 
     const handleSearch = (search, page, genre, format) => {
-        updateURL(search, genre, format, 1);
+        updateURL(search, genre, format, page);
 
         console.log(search, page, genre, format);
         const offset = (page - 1) * albumsPerPage;
