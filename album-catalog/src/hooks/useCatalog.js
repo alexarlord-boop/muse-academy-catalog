@@ -35,11 +35,13 @@ const useCatalog = () => {
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1);
-        updateURL(e.target.value, genre, format, 1);
+        // updateURL(e.target.value, genre, format, 1);
     };
 
     const handleSearch = (search, page, genre, format) => {
+        updateURL(search, genre, format, 1);
+
+        console.log(search, page, genre, format);
         const offset = (page - 1) * albumsPerPage;
 
         let query = supabase
@@ -102,6 +104,7 @@ const useCatalog = () => {
         setGenre,
         setFormat,
         handleSearchChange,
+        handleSearch,
         handlePageChange,
         updateURL,
         session,

@@ -47,7 +47,7 @@ const NavBar = () => {
             <NavbarContent>
 
                 <MediaQuery min="md">
-                    <NavbarBrand className="cursor-pointer " onClick={() => navigate("/catalog")}>
+                    <NavbarBrand className="cursor-pointer " onClick={() => {navigate("/catalog?page=1");window.location.reload();}}>
                         <MuseLogo/>
                     </NavbarBrand>
 
@@ -55,7 +55,7 @@ const NavBar = () => {
                         <>
                             <NavbarContent className=""></NavbarContent>
                             <NavbarContent className="">
-                                <ButtonGroup>
+
                                     <SearchInput
                                         searchTerm={searchTerm}
                                         onSearchChange={handleSearchChange}
@@ -72,7 +72,6 @@ const NavBar = () => {
                                         onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
                                         onClearFilters={() => updateURL(searchTerm, null, null, 1)}
                                     />
-                                </ButtonGroup>
                             </NavbarContent>
                             <NavbarContent>
                                 {
