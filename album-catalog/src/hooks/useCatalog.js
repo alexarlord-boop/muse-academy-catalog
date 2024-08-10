@@ -39,8 +39,6 @@ const useCatalog = () => {
     };
 
     const handleSearch = (search, page, genre, format) => {
-        updateURL(search, genre, format, page);
-
         console.log(search, page, genre, format);
         const offset = (page - 1) * albumsPerPage;
 
@@ -68,7 +66,6 @@ const useCatalog = () => {
                 }
                 setFilteredAlbums(data);
                 setAlbumsNumber(count);
-                setCurrentPage(1);
             })
             .catch((error) => {
                 console.error(error);
@@ -77,7 +74,9 @@ const useCatalog = () => {
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        console.log(page);
         updateURL(searchTerm, genre, format, page);
+        // window.location.reload();
     };
 
     const updateURL = (search, genre, format, page) => {

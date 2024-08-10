@@ -26,8 +26,6 @@ const CatalogPage = () => {
                 setFilteredAlbums={setFilteredAlbums}
             />
 
-            {/*TODO:- pagination togle is bugged when search is changed*/}
-            {/*TODO:- 2nd page, go to catalog init -- same togle*/}
             <CatalogPagination
                 albumsNumber={albumsNumber}
                 albumsPerPage={albumsPerPage}

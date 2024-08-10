@@ -41,7 +41,8 @@ export default function SearchInput() {
                 placeholder="Search..."
             />
             <Button className="" variant="bordered" isIconOnly={true} onClick={() => {
-                handleSearch(searchTerm, 1, genre, format)
+                handleSearch(searchTerm, 1, genre, format);
+                updateURL(searchTerm, genre, format, 1);
             }}>
                 <CiSearch/>
             </Button>
