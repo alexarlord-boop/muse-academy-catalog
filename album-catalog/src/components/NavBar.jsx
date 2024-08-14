@@ -26,6 +26,9 @@ const NavBar = () => {
     const {session, role} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const isPathActive = !!location.pathname.split("/")[2]; // Boolean to determine if the path segment exists
+
+
 
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -47,7 +50,9 @@ const NavBar = () => {
             <NavbarContent>
 
                 <MediaQuery min="md">
-                    <NavbarBrand className="cursor-pointer " onClick={() => {navigate("/catalog?page=1");}}>
+                    <NavbarBrand className="cursor-pointer " onClick={() => {
+                        navigate("/catalog?page=1");
+                    }}>
                         <MuseLogo/>
                     </NavbarBrand>
 
@@ -56,30 +61,37 @@ const NavBar = () => {
                             <NavbarContent className=""></NavbarContent>
                             <NavbarContent className="">
 
-                                    <SearchInput
-                                        searchTerm={searchTerm}
-                                        onSearchChange={handleSearchChange}
-                                        updateURL={updateURL}
-                                        genre={genre}
-                                        format={format}
-                                    />
+                                <SearchInput
+                                    searchTerm={searchTerm}
+                                    onSearchChange={handleSearchChange}
+                                    updateURL={updateURL}
+                                    genre={genre}
+                                    format={format}
+                                />
 
-                                    <FilterModal
-                                        genre={genre}
-                                        setGenre={setGenre}
-                                        format={format}
-                                        setFormat={setFormat}
-                                        onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
-                                        onClearFilters={() => updateURL(searchTerm, null, null, 1)}
-                                    />
+                                <FilterModal
+                                    genre={genre}
+                                    setGenre={setGenre}
+                                    format={format}
+                                    setFormat={setFormat}
+                                    onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
+                                    onClearFilters={() => updateURL(searchTerm, null, null, 1)}
+                                />
                             </NavbarContent>
                             <NavbarContent>
                                 {
+
                                     session?.user && role === "REDACTOR" &&
-                                    <Button className="" variant="bordered" color="danger" isIconOnly={true} onClick={() => addSampleAlbum()}>
+                                    <Button
+                                        variant="bordered"
+                                        isIconOnly={true}
+                                        disabled={isPathActive}
+                                        onClick={addSampleAlbum}
+                                        className={`${isPathActive ? 'border-gray-300 text-gray-300 bg-gray-100 cursor-not-allowed' :
+                                            'border-red-500 text-red-500 bg-transparent hover:bg-red-500 hover:text-white transition'} rounded-full p-2`} // Tailwind conditional classes
+                                    >
                                         <FaPlus/>
                                     </Button>
-
                                 }
                             </NavbarContent>
                         </>
