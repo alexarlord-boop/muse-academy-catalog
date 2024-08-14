@@ -1,25 +1,22 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import CatalogPagination from '../components/CatalogPagination.jsx';
 import AlbumGrid from '../components/AlbumGrid.jsx';
 import useCatalog from "../hooks/useCatalog.js";
 
 const CatalogPage = () => {
     const {
-        albumsNumber,
-        currentPage,
-        albumsPerPage,
         filteredAlbums,
         setFilteredAlbums,
+        albumsNumber,
+        albumsPerPage,
+        currentPage,
         handlePageChange,
-
     } = useCatalog();
 
 
-    // TODO:- make compound component for catalog, shared state via custom hook
     return (
         <>
-            {/*TODO:- add deletion modal window for confirmation*/}
-            {/*TODO:- fix car name spacing, font sizes (desk/mobile)*/}
+            {/*TODO:- fix card name spacing, font sizes (desk/mobile)*/}
             {/*TODO:- more filter options (year)*/}
             <AlbumGrid
                 filteredAlbums={filteredAlbums}
