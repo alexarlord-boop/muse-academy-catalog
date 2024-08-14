@@ -26,8 +26,7 @@ const NavBar = () => {
     const {session, role} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const isPathActive = !!location.pathname.split("/")[2]; // Boolean to determine if the path segment exists
-
+    const isPathActive = location.pathname.split("/")[2] === 'edit'; // Boolean to determine if the path segment exists
 
 
 
