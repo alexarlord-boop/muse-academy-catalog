@@ -17,7 +17,7 @@ import {useNavigate} from "react-router-dom";
 import {AssetIsAbsent} from "./icons/AssetIsAbsent.jsx";
 
 
-export default function AlbumCard({album, onCardDeleted}) {
+export default function AlbumCard({album, handleDeleteClick}) {
     const {session, role} = useContext(SessionContext);
     const [liked, setLiked] = useState(false);
     const navigate = useNavigate();
@@ -27,21 +27,7 @@ export default function AlbumCard({album, onCardDeleted}) {
         setLiked((prevState) => !prevState);
     }
 
-    const handleDeleteClick = async () => {
-        console.log(album.id);
-        const {data, error} = await supabase
-            .from('album')
-            .delete()
-            .eq('id', album.id)
-            .select()
 
-        if (error) {
-            console.error('Error deleting album:', error);
-        } else {
-            onCardDeleted(album);
-            console.log('Album deleted successfully:', data);
-        }
-    };
 
 
 

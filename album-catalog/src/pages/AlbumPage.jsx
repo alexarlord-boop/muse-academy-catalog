@@ -1,47 +1,35 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import useAlbum from "../hooks/useAlbum.js";
 import {Spacer} from "@nextui-org/react";
 import {AssetIsAbsent} from "../components/icons/AssetIsAbsent.jsx";
 import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
-import {supabase} from "../lib/helper/supabaseClient.js";
 import toast from "react-hot-toast";
 import {TbEdit, TbTrashX} from "react-icons/tb";
 import ConfirmationModal from "../components/ConfirmationModal.jsx";
+import useModalStore from "../hooks/useStore.js";
+import {useDeleteRecord} from "../hooks/useDeleteRecord.js";
 
 const AlbumPage = () => {
     const {id} = useParams();
     const {album, loading, error} = useAlbum(id);
     const navigate = useNavigate();
     const {session, role} = useContext(SessionContext);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const notify = (msg) => toast(msg);
+
+    const { isModalOpen, openModal, closeModal } = useModalStore();
+
+    const { deleteRecord, deleteLoading, deleteError } = useDeleteRecord();
+
+    const handleDelete = async () => {
+        await deleteRecord('album', 'id', album.id, '/catalog');
+        closeModal();
+    };
+
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const handleDeleteClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const confirmDelete = async () => {
-        setIsModalOpen(false);
-        const {data, error} = await supabase
-            .from('album')
-            .delete()
-            .eq('id', album.id)
-            .select();
-
-        if (error) {
-            console.error('Error deleting album:', error);
-            notify("Failed to delete album");
-        } else {
-            navigate('/catalog');
-            console.log('Album deleted successfully:', data);
-            notify("Album deleted successfully");
-        }
-    };
 
     return (
         <>
@@ -73,7 +61,7 @@ const AlbumPage = () => {
                                     startContent={<TbEdit/>}
                             >Edit</Button>
 
-                            <Button onClick={handleDeleteClick}
+                            <Button onClick={openModal}
                                     className="mx-auto flex py-2"
                                     color="danger"
                                     startContent={<TbTrashX/>}
@@ -97,12 +85,13 @@ const AlbumPage = () => {
                 </div>
             </div>
 
-            {/* Deletion Confirmation Modal */}
+            {/*TODO:- simplify modal*/}
             <ConfirmationModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={confirmDelete}
+                onClose={closeModal}
+                onConfirm={handleDelete}
                 title="Confirm Deletion"
+                confirmTitle="Delete"
                 description="Are you sure you want to delete this album? This action cannot be undone."
                 portalContainer={document.getElementById('modal')}
             />

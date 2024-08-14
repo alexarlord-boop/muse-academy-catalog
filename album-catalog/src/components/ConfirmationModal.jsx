@@ -1,14 +1,16 @@
 import React from 'react';
 import {Modal, Button, Spacer, ModalHeader, ModalBody, ModalContent} from "@nextui-org/react";
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, description, portalContainer }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, confirmTitle, description, portalContainer }) => {
+
+
     return (
         <Modal
             isOpen={isOpen}
             closeButton
             open={isOpen}
             onClose={onClose}
-            preventClose
+            preventclose
             portalContainer={portalContainer}
         >
             <ModalContent>
@@ -19,12 +21,12 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, description, por
                     <p>{description}</p>
                     <Spacer y={1} />
                     <div className="flex justify-end">
-                        <Button auto flat color="error" onClick={onConfirm}>
-                            Delete
-                        </Button>
-                        <Spacer x={0.5} />
                         <Button auto onClick={onClose}>
                             Cancel
+                        </Button>
+                        <Spacer x={0.5} />
+                        <Button color="danger" auto flat onClick={onConfirm}>
+                            {confirmTitle}
                         </Button>
                     </div>
                 </ModalBody>
