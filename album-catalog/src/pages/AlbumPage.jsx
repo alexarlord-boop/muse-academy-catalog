@@ -5,9 +5,7 @@ import {Spacer} from "@nextui-org/react";
 import {AssetIsAbsent} from "../components/icons/AssetIsAbsent.jsx";
 import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
-import toast from "react-hot-toast";
 import {TbEdit, TbTrashX} from "react-icons/tb";
-import ConfirmationModal from "../components/ConfirmationModal.jsx";
 import useModalStore from "../hooks/useStore.js";
 import {useDeleteRecord} from "../hooks/useDeleteRecord.js";
 
@@ -17,13 +15,22 @@ const AlbumPage = () => {
     const navigate = useNavigate();
     const {session, role} = useContext(SessionContext);
 
-    const { isModalOpen, openModal, closeModal } = useModalStore();
+    const { openModal, setModalContent, updateOperation } = useModalStore();
 
     const { deleteRecord, deleteLoading, deleteError } = useDeleteRecord();
 
     const handleDelete = async () => {
         await deleteRecord('album', 'id', album.id, '/catalog');
-        closeModal();
+    };
+
+    const handleOpenModal = () => {
+        setModalContent({
+            modalTitle: "Confirm Deletion",
+            confirmTitle: "Delete",
+            description: "Are you sure you want to delete this album? This action cannot be undone."
+        });
+        updateOperation(handleDelete);
+        openModal();
     };
 
 
@@ -61,7 +68,7 @@ const AlbumPage = () => {
                                     startContent={<TbEdit/>}
                             >Edit</Button>
 
-                            <Button onClick={openModal}
+                            <Button onClick={handleOpenModal}
                                     className="mx-auto flex py-2"
                                     color="danger"
                                     startContent={<TbTrashX/>}
@@ -84,17 +91,6 @@ const AlbumPage = () => {
                     )}
                 </div>
             </div>
-
-            {/*TODO:- simplify modal*/}
-            <ConfirmationModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onConfirm={handleDelete}
-                title="Confirm Deletion"
-                confirmTitle="Delete"
-                description="Are you sure you want to delete this album? This action cannot be undone."
-                portalContainer={document.getElementById('modal')}
-            />
         </>
     );
 };
