@@ -26,7 +26,7 @@ const ConfirmationModal = () => {
                             Cancel
                         </Button>
                         <Spacer x={0.5} />
-                        <Button color="black" auto flat onClick={executeOperation}>
+                        <Button color="danger" auto flat onClick={executeOperation}>
                             {strings.confirmTitle}
                         </Button>
                     </div>

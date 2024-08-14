@@ -4,7 +4,6 @@ import {supabase} from "../lib/helper/supabaseClient.js";
 import toast from "react-hot-toast";
 
 
-// Custom hook to delete a record
 export const useDeleteRecord = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -22,13 +21,16 @@ export const useDeleteRecord = () => {
         setLoading(false);
 
         if (error) {
-            console.error(`Error deleting record from ${table}:`, error);
+            console.error(`Error deleting ${table} from ${table}:`, error);
             setError(error);
-            notify("Failed to delete record");
+            notify(`Failed to delete ${table}`);
         } else {
+            const capitalized =
+                table.charAt(0).toUpperCase()
+                + table.slice(1)
             if (redirectPath) navigate(redirectPath);
-            console.log(`Record deleted successfully from ${table}:`, data);
-            notify("Record deleted successfully");
+            console.log(`${capitalized} deleted successfully from ${table}:`, data);
+            notify(`${capitalized} deleted successfully`);
         }
     };
 
