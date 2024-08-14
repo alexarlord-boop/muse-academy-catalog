@@ -8,6 +8,7 @@ import {SessionContext} from "../context/SessionContext.jsx";
 import {TbEdit, TbTrashX} from "react-icons/tb";
 import useModalStore from "../hooks/useStore.js";
 import {useDeleteRecord} from "../hooks/useDeleteRecord.js";
+import {deleteModalStrings} from "../strings.js";
 
 const AlbumPage = () => {
     const {id} = useParams();
@@ -24,11 +25,7 @@ const AlbumPage = () => {
     };
 
     const handleOpenModal = () => {
-        setModalContent({
-            modalTitle: "Confirm Deletion",
-            confirmTitle: "Delete",
-            description: "Are you sure you want to delete this album? This action cannot be undone."
-        });
+        setModalContent(deleteModalStrings);
         updateOperation(handleDelete);
         openModal();
     };

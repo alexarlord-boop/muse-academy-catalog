@@ -2,6 +2,7 @@ import React from "react";
 import AlbumCard from "./AlbumCard";
 import useModalStore from "../hooks/useStore.js";
 import { useDeleteRecord } from "../hooks/useDeleteRecord.js";
+import {deleteModalStrings} from "../strings.js";
 
 export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
 
@@ -19,11 +20,7 @@ export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
 
 
     const handleOpenModal = (forAlbumId) => {
-        setModalContent({
-            modalTitle: "Confirm Deletion",
-            confirmTitle: "Delete",
-            description: "Are you sure you want to delete this album? This action cannot be undone."
-        });
+        setModalContent(deleteModalStrings);
         updateOperation(() => handleDelete(forAlbumId));
         openModal();
     };
