@@ -42,7 +42,7 @@ const NavBar = () => {
     } = useCatalog();
 
     const {addSampleAlbum} = useSampleAlbum();
-    const pathsToExclude = ['/login', '/signup'];
+    const pathsToExclude = ['/login', '/signup', '/favourites'];
     return (
         <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
@@ -95,6 +95,8 @@ const NavBar = () => {
                             </NavbarContent>
                         </>
                     }
+
+
                 </MediaQuery>
 
 

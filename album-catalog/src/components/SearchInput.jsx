@@ -8,8 +8,6 @@ import {FaSearch} from "react-icons/fa";
 export default function SearchInput() {
     const {
         handleSearchChange,
-        handleSearch,
-        setCurrentPage,
         searchTerm,
         updateURL,
         genre,

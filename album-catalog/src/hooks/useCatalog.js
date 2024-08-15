@@ -1,13 +1,13 @@
-import { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient.js';
 import { SessionContext } from '../context/SessionContext.jsx';
 
-const useCatalog = () => {
+const useCatalog = (fetchFavoritesOnly = false) => {
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const { session, role } = useContext(SessionContext);
+    const { session } = useContext(SessionContext);
     const [albumsPerPage, setAlbumsPerPage] = useState(10);
     const [filteredAlbums, setFilteredAlbums] = useState([]);
     const [genre, setGenre] = useState('');
@@ -28,18 +28,57 @@ const useCatalog = () => {
         setGenre(genreParam);
         setFormat(formatParam);
 
-        handleSearch(search, page, genreParam, formatParam);
-    }, [location.search]);
+        if (session?.user) {
+            if (fetchFavoritesOnly) {
+                fetchFavorites(search, page, genreParam, formatParam);
+            } else {
+                fetchAll(search, page, genreParam, formatParam);
+            }
+        }
+    }, [location.search, fetchFavoritesOnly, session?.user]);
+
+    const fetchFavorites = async (search, page, genre, format) => {
+        const offset = (page - 1) * albumsPerPage;
+
+        const userId = session.user.id;
+        let { data, error } = await supabase
+            .from('favorites')
+            .select(`
+            album:album_id (id, name, art_creator, image_url, issue_date, genre1, format)
+        `)
+            .eq('user_id', userId)
+            .range(offset, offset + albumsPerPage - 1);
 
 
+        if (error) {
+            console.error(error);
+            return;
+        }
 
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-        // updateURL(e.target.value, genre, format, 1);
+        let filteredData = data.map(favorite => favorite.album);
+
+        // TODO:- not in a task context
+        // if (search) {
+        //     const lowerSearch = search.toLowerCase();
+        //     filteredData = filteredData.filter(album =>
+        //         album.name.toLowerCase().includes(lowerSearch) ||
+        //         album.art_creator.toLowerCase().includes(lowerSearch)
+        //     );
+        // }
+        //
+        // if (genre) {
+        //     filteredData = filteredData.filter(album => album.genre1 === genre);
+        // }
+        //
+        // if (format) {
+        //     filteredData = filteredData.filter(album => album.format === format);
+        // }
+
+        setFilteredAlbums(filteredData);
+        setAlbumsNumber(filteredData.length);
     };
 
-    const handleSearch = (search, page, genre, format) => {
-        console.log(search, page, genre, format);
+    const fetchAll = (search, page, genre, format) => {
         const offset = (page - 1) * albumsPerPage;
 
         let query = supabase
@@ -51,9 +90,11 @@ const useCatalog = () => {
         if (search) {
             query = query.or(`name.ilike.%${search}%,art_creator.ilike.%${search}%`);
         }
+
         if (genre) {
             query = query.eq('genre1', genre);
         }
+
         if (format) {
             query = query.eq('format', format);
         }
@@ -72,11 +113,13 @@ const useCatalog = () => {
             });
     };
 
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        console.log(page);
         updateURL(searchTerm, genre, format, page);
-        // window.location.reload();
     };
 
     const updateURL = (search, genre, format, page) => {
@@ -103,11 +146,10 @@ const useCatalog = () => {
         setGenre,
         setFormat,
         handleSearchChange,
-        handleSearch,
+        fetchAll,
         handlePageChange,
         updateURL,
-        session,
-        role
+        session
     };
 };
 
