@@ -16,6 +16,7 @@ import { SessionContext } from "../context/SessionContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { AssetIsAbsent } from "./icons/AssetIsAbsent.jsx";
 import useLikeAlbum from "../hooks/useLikeAlbum.js";
+import {BsThreeDots} from "react-icons/bs";
 
 export default function AlbumCard({ album, handleDeleteClick, variant = "catalog" }) {
     const { session, role } = useContext(SessionContext);
@@ -28,7 +29,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
     const isCatalogVariant = variant === "catalog"; // Check if it's the catalog variant
 
     return (
-        <Card key={album.id} className="min-h-[300px] border-transparent hover:border-gray-900">
+        <Card key={album.id} className="md:min-h-[355px] max-w-[300px]  border-transparent hover:border-gray-900">
             <CardBody
                 className="p-0 m-0 overflow-visible cursor-pointer hover:scale-105 ease-out duration-300"
                 onClick={() => navigate("/catalog/" + album.id)}
@@ -36,7 +37,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                 {album.image_url ? (
                     <Image
                         alt="Card background"
-                        className="object-fit rounded-xs"
+                        className="object-fit rounded-none"
                         src={album.image_url}
                         width={300}
                         height={300} // Ensure consistent image size
@@ -46,8 +47,8 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                 )}
             </CardBody>
 
-            <CardHeader className="px-4 flex-col items-start relative">
-                <h4 className="font-bold text-large leading-tight max-h-[48px] line-clamp-2">{album.name}</h4>
+            <CardHeader className="px-4 py-2 flex-col items-start relative">
+                <h4 className="font-bold text-large leading-tight max-h-[48px] line-clamp-2 lg:text-md ">{album.name}</h4>
                 <p className="text-default-400 uppercase font-bold">{album.art_creator}</p>
                 <span className="text-default-400">
                     <small>{album.issue_date.split("-")[0]} ● </small>
@@ -57,7 +58,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                 {session?.user && (
                     <Button
                         isIconOnly
-                        className="text-red-600 hover:bg-red-100 absolute bottom-2 right-2"
+                        className="text-red-600 hover:bg-red-200 absolute bottom-2 right-2"
                         radius="full"
                         variant="light"
                         onClick={() => toggleLike(userId)}
@@ -82,11 +83,11 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                         <DropdownTrigger>
                             <Button
                                 isIconOnly
-                                className="text-gray-600 bg-grey-100 absolute bottom-2 right-12"
+                                className="text-gray-600 bg-grey-100 absolute bottom-10 right-2"
                                 radius="full"
                                 variant="light"
                             >
-                                ...
+                                <BsThreeDots />
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
