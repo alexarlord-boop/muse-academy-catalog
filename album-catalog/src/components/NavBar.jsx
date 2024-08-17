@@ -46,7 +46,7 @@ const NavBar = () => {
     const pathsToExclude = ['/login', '/signup', '/favourites'];
     return (
         // TODO:- add favorites icon to navbar
-        <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true}
+        <Navbar className="py-0 px-4" maxWidth="2xl" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
 

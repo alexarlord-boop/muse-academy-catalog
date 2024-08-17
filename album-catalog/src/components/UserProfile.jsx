@@ -23,7 +23,7 @@ const UserProfile = () => {
     };
 
     const handleSwitch = () => {
-        navigate(isLiked ? "/catalog" : "/favourites" );
+        navigate(isLiked ? "/catalog" : "/favourites");
     }
 
     return (
@@ -32,12 +32,14 @@ const UserProfile = () => {
             ?
             <>
                 <NavbarContent as="div" justify="end">
-                    <HeartIcon size={30}
-                               className={isLiked ? "[&>path]:stroke-transparent" : ""}
-                               fill={isLiked ? "red" : "none"}
-                               onClick={handleSwitch}
-                               style={{cursor: "pointer"}}
-                    />
+                    <NavbarItem className="text-red-600 hover:bg-red-200 rounded-full p-1">
+                        <HeartIcon size={30}
+                                   className={isLiked ? "[&>path]:stroke-transparent" : ""}
+                                   fill={isLiked ? "red" : "none"}
+                                   onClick={handleSwitch}
+                                   style={{cursor: "pointer"}}
+                        />
+                    </NavbarItem>
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
                             <Avatar
