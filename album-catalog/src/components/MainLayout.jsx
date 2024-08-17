@@ -2,15 +2,49 @@ import React from "react";
 import NavBar from "./NavBar";
 import CustomToast from "./CustomToast.jsx";
 import ConfirmationModal from "./ConfirmationModal.jsx";
+import useCatalog from "../hooks/useCatalog.js";
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({children}) => {
+
+    const {
+        albumsNumber,
+        searchTerm,
+        albumsPerPage,
+        filteredAlbums,
+        setFilteredAlbums,
+        genre,
+        format,
+        setGenre,
+        setFormat,
+        handleSearchChange,
+        handlePageChange,
+        updateURL,
+    } = useCatalog(location.pathname === "/favourites")
     return (
         <div>
             {/*TODO:- add loader*/}
-            <NavBar />
-            <main className="container mx-auto px-5">{children}</main>
+            <NavBar
+                handleSearchChange={handleSearchChange}
+                searchTerm={searchTerm}
+                updateURL={updateURL}
+                genre={genre}
+                setGenre={setGenre}
+                format={format}
+                setFormat={setFormat}
+            />
+            <main className="container mx-auto px-5">
+                {
+                    React.cloneElement(children, {
+                        filteredAlbums,
+                        setFilteredAlbums,
+                        albumsNumber,
+                        albumsPerPage,
+                        handlePageChange,
+                    })
+                }
+            </main>
             <CustomToast/>
-            <ConfirmationModal/>  {/* deletion, publishing */}
+            <ConfirmationModal/> {/* deletion, publishing */}
         </div>
     );
 };

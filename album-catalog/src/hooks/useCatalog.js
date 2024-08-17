@@ -4,10 +4,8 @@ import {supabase} from '../lib/helper/supabaseClient.js';
 import {SessionContext} from '../context/SessionContext.jsx';
 
 const useCatalog = (fetchFavoritesOnly = false) => {
-    console.log("calling useCatalog");
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
     const {session} = useContext(SessionContext);
     const [albumsPerPage, setAlbumsPerPage] = useState(10);
     const [filteredAlbums, setFilteredAlbums] = useState([]);
@@ -18,13 +16,13 @@ const useCatalog = (fetchFavoritesOnly = false) => {
     const location = useLocation();
 
     useEffect(() => {
+        console.log("calling useCatalog: useEffect", location.search, fetchFavoritesOnly, session?.user, albumsNumber);
         const query = new URLSearchParams(location.search);
         const search = query.get('search') || '';
         const page = parseInt(query.get('page'), 10) || 1;
         const genreParam = query.get('genre') || '';
         const formatParam = query.get('format') || '';
 
-        setCurrentPage(page);
         setSearchTerm(search);
         setGenre(genreParam);
         setFormat(formatParam);
@@ -69,14 +67,15 @@ const useCatalog = (fetchFavoritesOnly = false) => {
     };
 
     const fetchAll = async (search, page, genre, format) => {
+        console.log('calling useCatalog: fetching all albums');
         const offset = (page - 1) * albumsPerPage;
         const userId = session.user.id;
 
         // Build the base query for albums
         let query = supabase
             .from('album')
-            .select('*', { count: 'exact' })
-            .order('id', { ascending: true })
+            .select('*', {count: 'exact'})
+            .order('id', {ascending: true})
             .range(offset, offset + albumsPerPage - 1);
 
         // Apply search filter (if search is provided)
@@ -95,7 +94,7 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         }
 
         // Execute the query
-        let { data: albumsData, count, error: albumError } = await query;
+        let {data: albumsData, count, error: albumError} = await query;
 
         if (albumError) {
             console.error(albumError);
@@ -103,7 +102,7 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         }
 
         // Fetch the user's favorites
-        let { data: favoriteAlbums, error: favError } = await supabase
+        let {data: favoriteAlbums, error: favError} = await supabase
             .from('favorites')
             .select('album_id')
             .eq('user_id', userId);
@@ -131,7 +130,6 @@ const useCatalog = (fetchFavoritesOnly = false) => {
     };
 
     const handlePageChange = (page) => {
-        setCurrentPage(page);
         updateURL(searchTerm, genre, format, page);
     };
 
@@ -148,8 +146,6 @@ const useCatalog = (fetchFavoritesOnly = false) => {
     return {
         albumsNumber,
         searchTerm,
-        currentPage,
-        setCurrentPage,
         albumsPerPage,
         filteredAlbums,
         setFilteredAlbums,
@@ -159,10 +155,8 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         setGenre,
         setFormat,
         handleSearchChange,
-        fetchAll,
         handlePageChange,
-        updateURL,
-        session
+        updateURL
     };
 };
 

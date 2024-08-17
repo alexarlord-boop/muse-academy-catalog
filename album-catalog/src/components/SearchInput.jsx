@@ -5,14 +5,14 @@ import React from "react";
 import {ButtonGroup} from "@nextui-org/button";
 import {FaSearch} from "react-icons/fa";
 
-export default function SearchInput() {
-    const {
+export default function SearchInput(
+    {
         handleSearchChange,
         searchTerm,
         updateURL,
         genre,
         format,
-    } = useCatalog(location.pathname === "/favourites");
+    }) {
     return (
         <ButtonGroup>
             <Input

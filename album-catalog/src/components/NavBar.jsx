@@ -1,14 +1,11 @@
 import {
     Navbar,
-    NavbarBrand,
     NavbarContent,
     NavbarItem,
-    NavbarMenuToggle,
     NavbarMenu
 } from "@nextui-org/navbar";
 import React, {useContext} from "react";
 import MuseLogo from "./MuseLogo.jsx";
-import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
 import {Link} from "react-router-dom";
@@ -16,27 +13,25 @@ import useCatalog from "../hooks/useCatalog.js";
 import SearchInput from "./SearchInput.jsx";
 import FilterModal from "./FilterModal.jsx";
 
-import {FaPlus} from "react-icons/fa";
-import useSampleAlbum from "../hooks/useSampleAlbum.js";
 import MediaQuery from "./MediaQuery.jsx";
 import UserProfile from "./UserProfile.jsx";
 import AddButton from "./AddButton.jsx";
 
 
-const NavBar = () => {
+const NavBar = ({
+                    handleSearchChange,
+                    searchTerm,
+                    updateURL,
+                    genre,
+                    setGenre,
+                    format,
+                    setFormat,
+                }) => {
     const {session, role} = useContext(SessionContext);
     const location = useLocation();
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const {
-        handleSearchChange,
-        searchTerm,
-        updateURL,
-        genre,
-        setGenre,
-        format,
-        setFormat,
-    } = useCatalog(location.pathname === "/favourites");
+
 
     const pathsToExclude = ['/login', '/signup', '/favourites'];
     return (
@@ -54,7 +49,7 @@ const NavBar = () => {
                             <NavbarContent>
                                 <SearchInput
                                     searchTerm={searchTerm}
-                                    onSearchChange={handleSearchChange}
+                                    handleSearchChange={handleSearchChange}
                                     updateURL={updateURL}
                                     genre={genre}
                                     format={format}
