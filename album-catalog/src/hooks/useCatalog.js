@@ -4,6 +4,7 @@ import {supabase} from '../lib/helper/supabaseClient.js';
 import {SessionContext} from '../context/SessionContext.jsx';
 
 const useCatalog = (fetchFavoritesOnly = false) => {
+    console.log("calling useCatalog");
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
