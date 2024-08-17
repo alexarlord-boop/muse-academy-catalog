@@ -71,12 +71,30 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         const offset = (page - 1) * albumsPerPage;
         const userId = session.user.id;
 
-        // Fetch all albums
-        let {data: albumsData, count, error: albumError} = await supabase
+        // Build the base query for albums
+        let query = supabase
             .from('album')
-            .select('*', {count: 'exact'})
-            .order('id', {ascending: true})
+            .select('*', { count: 'exact' })
+            .order('id', { ascending: true })
             .range(offset, offset + albumsPerPage - 1);
+
+        // Apply search filter (if search is provided)
+        if (search) {
+            query = query.or(`name.ilike.%${search}%,art_creator.ilike.%${search}%`);
+        }
+
+        // Apply genre filter (if genre is provided)
+        if (genre) {
+            query = query.eq('genre1', genre);
+        }
+
+        // Apply format filter (if format is provided)
+        if (format) {
+            query = query.eq('format', format);
+        }
+
+        // Execute the query
+        let { data: albumsData, count, error: albumError } = await query;
 
         if (albumError) {
             console.error(albumError);
@@ -84,7 +102,7 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         }
 
         // Fetch the user's favorites
-        let {data: favoriteAlbums, error: favError} = await supabase
+        let { data: favoriteAlbums, error: favError } = await supabase
             .from('favorites')
             .select('album_id')
             .eq('user_id', userId);
@@ -97,27 +115,12 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         const favoriteAlbumIds = favoriteAlbums.map(fav => fav.album_id);
 
         // Map albums and add isLiked status
-        let enrichedAlbums = albumsData.map(album => ({
+        const enrichedAlbums = albumsData.map(album => ({
             ...album,
-            isLiked: favoriteAlbumIds.includes(album.id) // Check if the album is in the favorite list
+            isLiked: favoriteAlbumIds.includes(album.id), // Check if the album is in the favorite list
         }));
 
-        // Filter by search, genre, and format
-        if (search) {
-            enrichedAlbums = enrichedAlbums.filter(album =>
-                album.name.toLowerCase().includes(search.toLowerCase()) ||
-                album.art_creator.toLowerCase().includes(search.toLowerCase())
-            );
-        }
-
-        if (genre) {
-            enrichedAlbums = enrichedAlbums.filter(album => album.genre1 === genre);
-        }
-
-        if (format) {
-            enrichedAlbums = enrichedAlbums.filter(album => album.format === format);
-        }
-
+        // Set the state with the fetched data
         setFilteredAlbums(enrichedAlbums);
         setAlbumsNumber(count);
     };
