@@ -29,7 +29,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
     const isCatalogVariant = variant === "catalog"; // Check if it's the catalog variant
 
     return (
-        <Card key={album.id} className="md:min-h-[355px] max-w-[300px]  border-transparent hover:border-gray-900">
+        <Card key={album.id} className=" w-[238px] h-[355px]  border-black border-1 hover:border-gray-900">
             <CardBody
                 className="p-0 m-0 overflow-visible cursor-pointer hover:scale-105 ease-out duration-300"
                 onClick={() => navigate("/catalog/" + album.id)}
