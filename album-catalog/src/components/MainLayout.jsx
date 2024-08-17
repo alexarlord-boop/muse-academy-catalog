@@ -6,6 +6,7 @@ import ConfirmationModal from "./ConfirmationModal.jsx";
 const MainLayout = ({ children }) => {
     return (
         <div>
+            {/*TODO:- add loader*/}
             <NavBar />
             <main className="container mx-auto px-5">{children}</main>
             <CustomToast/>

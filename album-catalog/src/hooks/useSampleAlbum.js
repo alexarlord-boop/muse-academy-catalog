@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 
 const useSampleAlbum = (handleSearch, searchTerm, currentPage, genre, format) => {
     const navigate = useNavigate();
-    const notify = (msg) => toast(msg);
 
     const addSampleAlbum = useCallback(async () => {
         try {
@@ -34,7 +33,7 @@ const useSampleAlbum = (handleSearch, searchTerm, currentPage, genre, format) =>
 
         } catch (error) {
             console.error('Error adding sample album:', error);
-            notify('Failed to add album');
+            toast.error('Failed to add album');
         }
     }, [handleSearch, searchTerm, currentPage, genre, format, navigate]);
 

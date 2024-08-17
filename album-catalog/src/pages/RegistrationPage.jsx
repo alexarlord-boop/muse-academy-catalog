@@ -14,7 +14,6 @@ const LoginPage = () => {
     const [password, setPassword] = useState('11112222');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    const notify = (msg) => toast(msg);
 
 
 
@@ -28,7 +27,7 @@ const LoginPage = () => {
             navigate(0);
         } else {
             setErrorMessage(response.message);
-            notify('Error occurred while signing up');
+            toast.error('Error occurred while signing up');
         }
 
     };

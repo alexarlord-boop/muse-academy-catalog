@@ -26,6 +26,13 @@ export default function CustomToast(props) {
                             secondary: 'black',
                         },
                     },
+                    error: {
+                        duration: 3000,
+                        theme: {
+                            primary: 'red',
+                            secondary: 'black',
+                        },
+                    }
                 }}
             />
         </>

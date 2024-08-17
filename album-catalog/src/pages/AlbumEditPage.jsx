@@ -16,7 +16,6 @@ const AlbumEditPage = () => {
     const { formats, loading: formatsLoading, error: formatsError } = useFormats();
     const { genres, loading: genresLoading, error: genresError } = useGenres();
     const navigate = useNavigate();
-    const notify = (msg) => toast(msg);
     const [formData, setFormData] = useState({
         name: '',
         creation_info: '',
@@ -70,7 +69,7 @@ const AlbumEditPage = () => {
 
             if (error) throw error;
             console.log('Album updated:', data);
-            notify('Album updated');
+            toast.success('Album updated');
 
             // Navigate back to the album details page or show a success message
             navigate(`/catalog/${id}`);

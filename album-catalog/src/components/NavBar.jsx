@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/navbar";
 import React, {useContext} from "react";
 import MuseLogo from "./MuseLogo.jsx";
-import {Button, ButtonGroup} from "@nextui-org/button";
+import {Button} from "@nextui-org/button";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
 import {Link} from "react-router-dom";
@@ -26,8 +26,9 @@ const NavBar = () => {
     const {session, role} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const isPathActive = location.pathname.split("/")[2] === 'edit'; // Boolean to determine if the path segment exists
+    const isPathActive = location.pathname.split("/")[2] === 'edit';
 
+    const showAddBtn = session?.user && role === "REDACTOR";
 
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -39,19 +40,18 @@ const NavBar = () => {
         setGenre,
         format,
         setFormat,
-    } = useCatalog();
+    } = useCatalog(location.pathname === "/favourites");
 
     const {addSampleAlbum} = useSampleAlbum();
     const pathsToExclude = ['/login', '/signup', '/favourites'];
     return (
+        // TODO:- add favorites icon to navbar
         <Navbar className="py-2 px-4" maxWidth="2xl" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
 
                 <MediaQuery min="md">
-                    <NavbarBrand className="cursor-pointer " onClick={() => {
-                        navigate("/catalog?page=1");
-                    }}>
+                    <NavbarBrand>
                         <MuseLogo/>
                     </NavbarBrand>
 
@@ -79,15 +79,14 @@ const NavBar = () => {
                             </NavbarContent>
                             <NavbarContent>
                                 {
-
-                                    session?.user && role === "REDACTOR" &&
+                                    showAddBtn &&
                                     <Button
                                         variant="bordered"
                                         isIconOnly={true}
                                         disabled={isPathActive}
                                         onClick={addSampleAlbum}
                                         className={`${isPathActive ? 'border-gray-300 text-gray-300 bg-gray-100 cursor-not-allowed' :
-                                            'border-red-500 text-red-500 bg-transparent hover:bg-red-500 hover:text-white transition'} rounded-full p-2`} // Tailwind conditional classes
+                                            'border-black text-black bg-transparent hover:bg-black hover:text-white transition'} rounded-full p-2`} // Tailwind conditional classes
                                     >
                                         <FaPlus/>
                                     </Button>

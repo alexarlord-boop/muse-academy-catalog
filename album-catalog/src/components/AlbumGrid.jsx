@@ -1,14 +1,17 @@
-import React from "react";
+import React, {useEffect, useLayoutEffect} from "react";
 import AlbumCard from "./AlbumCard";
 import useModalStore from "../hooks/useStore.js";
 import { useDeleteRecord } from "../hooks/useDeleteRecord.js";
 import {deleteModalStrings} from "../strings.js";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
 
 
     const { deleteRecord, deleteLoading, deleteError } = useDeleteRecord();
     const { openModal, setModalContent, updateOperation } = useModalStore();
+    const navigate = useNavigate();
+    const location = useLocation();
 
 
     const handleDelete = async (albumId) => {
@@ -34,9 +37,11 @@ export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
                             album={album}
                             handleDeleteClick={() => handleOpenModal(album.id)} // Pass the album to the delete handler
                             key={album.id}
+                            variant={location.pathname.includes("/catalog") ? "catalog" : "favorites"}
                         />
                     ))
-                ) : (
+                ) :
+                    (
                     <p>No albums found</p>
                 )}
             </div>

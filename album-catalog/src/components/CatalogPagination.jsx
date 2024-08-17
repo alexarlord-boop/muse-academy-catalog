@@ -6,7 +6,7 @@ import {useLocation} from "react-router-dom";
 export default function CatalogPagination() {
     const location = useLocation();
 
-    const {albumsNumber, albumsPerPage, handlePageChange} = useCatalog()
+    const {albumsNumber, albumsPerPage, handlePageChange} = useCatalog(location.pathname === "/favourites")
     let total = Math.ceil(albumsNumber / albumsPerPage);
     const currentPage = parseInt(new URLSearchParams(location.search).get('page')) || 1;
 

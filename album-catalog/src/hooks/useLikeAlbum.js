@@ -37,7 +37,7 @@ const useLikeAlbum = (albumId, initialLikedStatus = false) => {
                 }
 
                 setIsLiked(true);
-                toast('Album added to favorites');
+                toast.success('Album added to favorites');
             }
         } catch (err) {
             setError(err.message);

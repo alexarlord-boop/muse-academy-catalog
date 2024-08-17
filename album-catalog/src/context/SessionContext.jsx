@@ -81,7 +81,7 @@ export const SessionProvider = ({children}) => {
 
                 setSession(data.user.session);
                 setRole("VISITOR");
-                return { success: true, message: 'Signed up successfully' };
+                return { success: true, message: 'Signed up' };
             }
         } catch (error) {
             console.error('Unexpected error:', error);
@@ -102,7 +102,7 @@ export const SessionProvider = ({children}) => {
             } else {
                 console.log('Signed in successfully:', data);
                 setSession(data.session);
-                return { success: true, message: 'Signed in successfully' };
+                return { success: true, message: 'Signed in' };
             }
         } catch (error) {
             console.error('Unexpected error:', error);

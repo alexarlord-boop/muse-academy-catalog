@@ -12,7 +12,7 @@ export default function SearchInput() {
         updateURL,
         genre,
         format,
-    } = useCatalog();
+    } = useCatalog(location.pathname === "/favourites");
     return (
         <ButtonGroup>
             <Input

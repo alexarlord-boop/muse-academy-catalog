@@ -11,7 +11,7 @@ const CatalogPage = () => {
         albumsPerPage,
         currentPage,
         handlePageChange,
-    } = useCatalog();
+    } = useCatalog(location.pathname === "/favourites");
 
 
     return (

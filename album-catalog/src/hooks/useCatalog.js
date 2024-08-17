@@ -1,13 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from '../lib/helper/supabaseClient.js';
-import { SessionContext } from '../context/SessionContext.jsx';
+import {useState, useEffect, useContext} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
+import {supabase} from '../lib/helper/supabaseClient.js';
+import {SessionContext} from '../context/SessionContext.jsx';
 
 const useCatalog = (fetchFavoritesOnly = false) => {
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const { session } = useContext(SessionContext);
+    const {session} = useContext(SessionContext);
     const [albumsPerPage, setAlbumsPerPage] = useState(10);
     const [filteredAlbums, setFilteredAlbums] = useState([]);
     const [genre, setGenre] = useState('');
@@ -34,83 +34,92 @@ const useCatalog = (fetchFavoritesOnly = false) => {
             } else {
                 fetchAll(search, page, genreParam, formatParam);
             }
+            console.log(albumsNumber);
         }
-    }, [location.search, fetchFavoritesOnly, session?.user]);
+    }, [location.search, fetchFavoritesOnly, session?.user, albumsNumber]);
 
     const fetchFavorites = async (search, page, genre, format) => {
         const offset = (page - 1) * albumsPerPage;
 
         const userId = session.user.id;
-        let { data, error } = await supabase
+        let {data: favoriteData, count, error: favError} = await supabase
             .from('favorites')
             .select(`
             album:album_id (id, name, art_creator, image_url, issue_date, genre1, format)
-        `)
+        `, {count: 'exact'})
             .eq('user_id', userId)
             .range(offset, offset + albumsPerPage - 1);
-
-
-        if (error) {
-            console.error(error);
+        if (favError) {
+            console.error(favError);
             return;
         }
 
-        let filteredData = data.map(favorite => favorite.album);
+        let filteredData = favoriteData.map(favorite => ({
+            ...favorite.album,
+            isLiked: true  // Mark these albums as liked
+        }));
 
-        // TODO:- not in a task context
-        // if (search) {
-        //     const lowerSearch = search.toLowerCase();
-        //     filteredData = filteredData.filter(album =>
-        //         album.name.toLowerCase().includes(lowerSearch) ||
-        //         album.art_creator.toLowerCase().includes(lowerSearch)
-        //     );
-        // }
-        //
-        // if (genre) {
-        //     filteredData = filteredData.filter(album => album.genre1 === genre);
-        // }
-        //
-        // if (format) {
-        //     filteredData = filteredData.filter(album => album.format === format);
-        // }
+        if (filteredData.length === 0) {
+            updateURL(search, 1, genre, format);
+        }
 
         setFilteredAlbums(filteredData);
-        setAlbumsNumber(filteredData.length);
+        setAlbumsNumber(count);
     };
 
-    const fetchAll = (search, page, genre, format) => {
+    const fetchAll = async (search, page, genre, format) => {
         const offset = (page - 1) * albumsPerPage;
+        const userId = session.user.id;
 
-        let query = supabase
+        // Fetch all albums
+        let {data: albumsData, count, error: albumError} = await supabase
             .from('album')
-            .select('*', { count: 'exact' })
-            .order('id', { ascending: true })
+            .select('*', {count: 'exact'})
+            .order('id', {ascending: true})
             .range(offset, offset + albumsPerPage - 1);
 
+        if (albumError) {
+            console.error(albumError);
+            return;
+        }
+
+        // Fetch the user's favorites
+        let {data: favoriteAlbums, error: favError} = await supabase
+            .from('favorites')
+            .select('album_id')
+            .eq('user_id', userId);
+
+        if (favError) {
+            console.error(favError);
+            return;
+        }
+
+        const favoriteAlbumIds = favoriteAlbums.map(fav => fav.album_id);
+
+        // Map albums and add isLiked status
+        let enrichedAlbums = albumsData.map(album => ({
+            ...album,
+            isLiked: favoriteAlbumIds.includes(album.id) // Check if the album is in the favorite list
+        }));
+
+        // Filter by search, genre, and format
         if (search) {
-            query = query.or(`name.ilike.%${search}%,art_creator.ilike.%${search}%`);
+            enrichedAlbums = enrichedAlbums.filter(album =>
+                album.name.toLowerCase().includes(search.toLowerCase()) ||
+                album.art_creator.toLowerCase().includes(search.toLowerCase())
+            );
         }
 
         if (genre) {
-            query = query.eq('genre1', genre);
+            enrichedAlbums = enrichedAlbums.filter(album => album.genre1 === genre);
         }
 
         if (format) {
-            query = query.eq('format', format);
+            enrichedAlbums = enrichedAlbums.filter(album => album.format === format);
         }
 
-        query
-            .then(({ data, count, error }) => {
-                if (error) {
-                    console.error(error);
-                    return;
-                }
-                setFilteredAlbums(data);
-                setAlbumsNumber(count);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        setFilteredAlbums(enrichedAlbums);
+        setAlbumsNumber(count);
     };
 
     const handleSearchChange = (e) => {
