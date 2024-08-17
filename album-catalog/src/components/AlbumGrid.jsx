@@ -15,8 +15,10 @@ export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
 
 
     const handleDelete = async (albumId) => {
-        await deleteRecord('album', 'id', albumId, '/catalog');
         const newAlbums = filteredAlbums.filter((a) => a.id !== albumId);
+
+        await deleteRecord('album', 'id', albumId, newAlbums.length === 0 ? "/catalog/?page=1" : null);
+
         setFilteredAlbums(newAlbums);
     };
 

@@ -8,12 +8,17 @@ export default function CatalogPagination() {
 
     const {albumsNumber, albumsPerPage, handlePageChange} = useCatalog(location.pathname === "/favourites")
     let total = Math.ceil(albumsNumber / albumsPerPage);
-    const currentPage = parseInt(new URLSearchParams(location.search).get('page')) || 1;
+    const query = new URLSearchParams(location.search);
+    const pageParam = query.get('page');
+    console.log(pageParam);
+    const currentPage = parseInt(query.get('page'), 10);
+
 
     useEffect(() => {
         total = Math.ceil(albumsNumber / albumsPerPage);
-        console.log(albumsNumber, albumsPerPage);
-        console.log(location.search, total, currentPage);
+        console.log(albumsNumber);
+        console.log(currentPage);
+        console.log(location);
     }, [location]);
 
     return (

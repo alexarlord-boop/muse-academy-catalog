@@ -34,7 +34,7 @@ const useCatalog = (fetchFavoritesOnly = false) => {
             } else {
                 fetchAll(search, page, genreParam, formatParam);
             }
-            console.log(albumsNumber);
+
         }
     }, [location.search, fetchFavoritesOnly, session?.user, albumsNumber]);
 
@@ -60,7 +60,7 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         }));
 
         if (filteredData.length === 0) {
-            updateURL(search, 1, genre, format);
+            updateURL(search, genre, format, 1);
         }
 
         setFilteredAlbums(filteredData);
