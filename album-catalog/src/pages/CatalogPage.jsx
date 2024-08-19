@@ -13,7 +13,6 @@ const CatalogPage = (
 ) => {
     return (
         <>
-            {/*TODO:- fix card name spacing, font sizes (desk/mobile)*/}
             {/*TODO:- more filter options (year)*/}
             <AlbumGrid
                 filteredAlbums={filteredAlbums}

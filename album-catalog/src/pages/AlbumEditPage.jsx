@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from "react-router-dom";
 import useAlbum from "../hooks/useAlbum.js";
 import useFormats from "../hooks/useFormats.js";
 import useGenres from "../hooks/useGenres.js";
-import { Spacer } from "@nextui-org/react";
-import { AssetIsAbsent } from "../components/icons/AssetIsAbsent.jsx";
-import { Input, Textarea } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { supabase } from "../lib/helper/supabaseClient.js";
+import {Spacer} from "@nextui-org/react";
+import {AssetIsAbsent} from "../components/icons/AssetIsAbsent.jsx";
+import {Input, Textarea} from "@nextui-org/input";
+import {Button} from "@nextui-org/button";
+import {supabase} from "../lib/helper/supabaseClient.js";
 import toast from "react-hot-toast";
+import EditInput from "../components/EditPageComponents/EditInput.jsx";
+import EditSelect from "../components/EditPageComponents/EditSelect.jsx";
+import EditText from "../components/EditPageComponents/EditText.jsx";
 
 const AlbumEditPage = () => {
-    const { id } = useParams();
-    const { album, loading, error } = useAlbum(id);
-    const { formats, loading: formatsLoading, error: formatsError } = useFormats();
-    const { genres, loading: genresLoading, error: genresError } = useGenres();
+    const {id} = useParams();
+    const {album, loading, error} = useAlbum(id);
+    const {formats, loading: formatsLoading, error: formatsError} = useFormats();
+    const {genres, loading: genresLoading, error: genresError} = useGenres();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
@@ -43,7 +46,7 @@ const AlbumEditPage = () => {
     }, [album]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData({
             ...formData,
             [name]: value
@@ -52,7 +55,7 @@ const AlbumEditPage = () => {
 
     const handleSave = async () => {
         try {
-            const { data, error } = await supabase
+            const {data, error} = await supabase
                 .from('album') // Replace with your table name
                 .update({
                     name: formData.name.trim(),
@@ -88,106 +91,39 @@ const AlbumEditPage = () => {
         <>
             <div className="flex flex-wrap mx-auto p-6 bg-white">
                 <div className="w-full md:w-1/2 px-4">
-                    <Input
-                        name="name"
-                        placeholder="Enter album name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="text-6xl font-bold border-black border-dashed border-1 rounded-xl"
-                    />
-                    <Spacer y={3} />
                     <p className="text-default-500 text-xl font-bold">{album.art_creator}</p>
-                    <span>
-
-                        <Input
-                            type="date"
-                            name="issue_date"
-                            value={formData.issue_date}
-                            onChange={handleChange}
-                            className="border-black border-dashed border-1 mt-2 rounded-xl"
-                        />
-                        <Spacer y={3}/>
-                         <div className="flex">
-                             <select
-                                 name="format"
-                                 value={formData.format}
-                                 onChange={handleChange}
-                                 className="flex w-2/5 text-default-400 border-black border-dashed border-1 rounded-xl"
-                             >
-                                {formats.map(format => (
-                                    <option key={format.id} value={format.name}>
-                                        {format.name}
-                                    </option>
-                                ))}
-                            </select>
+                    <Spacer y={3}/>
+                    <div className="flex">
+                        <EditInput size="lg" name="name" type="name" value={formData.name} onChange={handleChange}/>
                         <Spacer x={5}/>
-                        <select
-                            name="genre1"
-                            value={formData.genre1}
-                            onChange={handleChange}
-                            className="flex w-2/5 text-default-400 border-black border-dashed border-1 rounded-xl"
-                        >
-                            {genres.map(genre => (
-                                <option key={genre.id} value={genre.name}>
-                                    {genre.name}
-                                </option>
-                            ))}
-                        </select>
-                              <Spacer x={5}/>
-                              <Input
-                                  type="number"
-                                  name="track_number"
-                                  placeholder="# Tracks"
-                                  value={formData.track_number}
-                                  onChange={handleChange}
-                                  className="flex w-1/5 text-default-400 border-black border-dashed border-1 rounded-xl"
-                              />
-                         </div>
-                    </span>
+                        <EditInput type="date" value={formData.issue_date} onChange={handleChange}/>
+
+                    </div>
+                    <Spacer y={3}/>
+                    <div className="flex">
+                        <EditSelect name="format" value={formData.format} onChange={handleChange} options={formats}/>
+                        <Spacer x={5}/>
+                        <EditSelect name="genre1" value={formData.genre1} onChange={handleChange} options={genres}/>
+                        <Spacer x={5}/>
+                        <EditInput size="md" name="track_number" type="number" value={formData.track_number}
+                                   onChange={handleChange}/>
+                    </div>
+
                     <Spacer y={5}/>
                     <div>
                         <h2 className="text-xl font-semibold">About the Album</h2>
                         <Spacer y={2}/>
-                        <div className="text-gray-600 mt-2">
-                            <strong>Creation Info:</strong>
-                            <Textarea
-                                maxRows={6}
-                                name="creation_info"
-                                labelPlacement="outside"
-                                placeholder="Enter creation info"
-                                value={formData.creation_info}
-                                onChange={handleChange}
-                                className="border-black border-dashed border-1 rounded-xl"
-                            />
-                        </div>
-                        <Spacer y={3} />
-                        <div className="text-gray-600">
-                            <strong>Concept Info:</strong>
-                            <Textarea
-                                maxRows={6}
-                                name="concept_info"
-                                labelPlacement="outside"
-                                placeholder="Enter concept info"
-                                value={formData.concept_info}
-                                onChange={handleChange}
-                                className="border-black border-dashed border-1 rounded-xl"
-                            />
-                        </div>
-
-                        <Spacer y={3} />
-                        <Input
-                            name="image_url"
-                            placeholder="Enter image URL"
-                            value={formData.image_url}
-                            onChange={handleChange}
-                            className="border-black border-dashed border-1 mt-2 rounded-xl"
-                        />
-                        <Spacer y={5} />
+                        <EditText name="creation_info" value={formData.creation_info} onChange={handleChange}/>
+                        <Spacer y={3}/>
+                        <EditText name="concept_info" value={formData.concept_info} onChange={handleChange}/>
+                        <Spacer y={3}/>
+                        <EditInput size="lg" type="image_url" value={formData.image_url} onChange={handleChange}/>
+                        <Spacer y={5}/>
                     </div>
                     <Button onClick={handleSave} className="mx-auto flex py-2">Save</Button>
                     <Spacer y={5}/>
                 </div>
-                <div className="w-full md:w-1/2 px-4 flex flex-col justify-center items-center">
+                <div className="w-full md:w-1/2 px-4 flex ">
                     {formData.image_url ? (
                         <img
                             src={formData.image_url}
@@ -195,7 +131,7 @@ const AlbumEditPage = () => {
                             className="object-cover rounded-xl shadow-lg max-h-screen"
                         />
                     ) : (
-                        <AssetIsAbsent />
+                        <AssetIsAbsent/>
                     )}
                 </div>
             </div>
