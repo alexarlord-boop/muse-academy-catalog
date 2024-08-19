@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import EditInput from "../components/EditPageComponents/EditInput.jsx";
 import EditSelect from "../components/EditPageComponents/EditSelect.jsx";
 import EditText from "../components/EditPageComponents/EditText.jsx";
+import PreviewImage from "../components/EditPageComponents/PreviewImage.jsx";
 
 const AlbumEditPage = () => {
     const {id} = useParams();
@@ -123,17 +124,9 @@ const AlbumEditPage = () => {
                     <Button onClick={handleSave} className="mx-auto flex py-2">Save</Button>
                     <Spacer y={5}/>
                 </div>
-                <div className="w-full md:w-1/2 px-4 flex ">
-                    {formData.image_url ? (
-                        <img
-                            src={formData.image_url}
-                            alt={`${formData.name} cover`}
-                            className="object-cover rounded-xl shadow-lg max-h-screen"
-                        />
-                    ) : (
-                        <AssetIsAbsent/>
-                    )}
-                </div>
+
+                <PreviewImage image_url={formData.image_url} />
+
             </div>
         </>
     );
