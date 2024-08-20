@@ -66,7 +66,7 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
             favorite.album ? {
                 ...favorite.album,
                 isLiked: true  // Mark these albums as liked
-            }: null).filter(album => album !== null);
+            } : null).filter(album => album !== null);
 
         if (filteredData.length === 0) {
             updateURL(search, genre, format, 1);

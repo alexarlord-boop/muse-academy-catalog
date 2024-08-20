@@ -3,23 +3,28 @@ import NavBar from "./NavBar";
 import CustomToast from "./CustomToast.jsx";
 import ConfirmationModal from "./ConfirmationModal.jsx";
 import useCatalog from "../hooks/useCatalog.js";
+import useAlbumStore from "../hooks/useAlbumsStore.js";
 
 const MainLayout = ({children}) => {
 
     const {
-        albumsNumber,
-        searchTerm,
-        albumsPerPage,
-        filteredAlbums,
-        setFilteredAlbums,
-        genre,
-        format,
-        setGenre,
-        setFormat,
         handleSearchChange,
         handlePageChange,
         updateURL,
     } = useCatalog(location.pathname === "/favourites", location.pathname !== "/unpublished");
+
+    const {
+        albumsNumber,
+        albumsPerPage,
+        filteredAlbums,
+        searchTerm,
+        genre,
+        format,
+        setFilteredAlbums,
+        setGenre,
+        setFormat,
+    } = useAlbumStore();
+
     return (
         <div>
             {/*TODO:- add loader*/}

@@ -4,8 +4,6 @@ import AlbumGrid from '../components/AlbumGrid.jsx';
 
 const CatalogPage = (
     {
-        filteredAlbums,
-        setFilteredAlbums,
         albumsNumber,
         albumsPerPage,
         handlePageChange,
@@ -14,16 +12,8 @@ const CatalogPage = (
     return (
         <>
             {/*TODO:- more filter options (year)*/}
-            <AlbumGrid
-                filteredAlbums={filteredAlbums}
-                setFilteredAlbums={setFilteredAlbums}
-            />
-
-            <CatalogPagination
-                albumsNumber={albumsNumber}
-                albumsPerPage={albumsPerPage}
-                onPageChange={handlePageChange}
-            />
+            <AlbumGrid/>
+            <CatalogPagination/>
         </>
     );
 };

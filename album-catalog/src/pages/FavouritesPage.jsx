@@ -14,10 +14,7 @@ const FavouritesPage = (
 ) => {
     return (
         <>
-            <AlbumGrid
-                filteredAlbums={filteredAlbums}
-                setFilteredAlbums={setFilteredAlbums}
-            />
+            <AlbumGrid/>
 
             <CatalogPagination
                 albumsNumber={albumsNumber}

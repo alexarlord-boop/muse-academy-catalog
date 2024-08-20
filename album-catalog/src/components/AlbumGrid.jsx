@@ -1,21 +1,11 @@
-import React, {useEffect, useLayoutEffect} from "react";
+import React from "react";
 import AlbumCard from "./AlbumCardComponents/AlbumCard.jsx";
-import useModalStore from "../hooks/useStore.js";
-import { useDeleteRecord } from "../hooks/useDeleteRecord.js";
-import {deleteModalStrings} from "../strings.js";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, } from "react-router-dom";
+import useAlbumStore from "../hooks/useAlbumsStore.js";
 
-export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
-
-
-    const navigate = useNavigate();
+export default function AlbumGrid() {
     const location = useLocation();
-
-
-
-
-
-
+    const {filteredAlbums} = useAlbumStore();
 
     return (
         <div className="container flex items-center justify-center h-full">

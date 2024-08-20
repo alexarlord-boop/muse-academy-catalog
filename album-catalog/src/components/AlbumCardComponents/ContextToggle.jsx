@@ -27,7 +27,9 @@ export default function ContextToggle({album}) {
     const {deleteRecord} = useDeleteRecord();
 
     const handlePublishToggle = async () => {
+        let newAlbums = filteredAlbums;
         const newState = !album.is_public; // Toggle the current state
+
         const success = await changePublicState(album.id, newState);
         if (success) {
             // Update the album's public state in the filteredAlbums
@@ -35,6 +37,10 @@ export default function ContextToggle({album}) {
                 a.id === album.id ? {...a, is_public: newState} : a
             );
             setFilteredAlbums(updatedAlbums);
+
+            newAlbums = filteredAlbums.filter((a) => a.id !== album.id);
+            setFilteredAlbums(newAlbums);
+
 
             // Show a success toast notification
             toast.success(`Album ${newState ? 'published' : 'unpublished'} successfully`);
@@ -49,13 +55,7 @@ export default function ContextToggle({album}) {
         const newAlbums = filteredAlbums.filter((a) => a.id !== albumId);
 
         const success = await deleteRecord('album', 'id', albumId, newAlbums.length === 0 ? "/catalog/?page=1" : null);
-
-        if (success) {
-            setFilteredAlbums(newAlbums);
-            toast.success('Album deleted successfully');
-        } else {
-            toast.error('Failed to delete the album');
-        }
+        setFilteredAlbums(newAlbums);
     };
 
     const handleOpenModal = (forAlbumId) => {
