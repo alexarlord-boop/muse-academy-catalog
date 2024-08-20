@@ -19,7 +19,7 @@ const MainLayout = ({children}) => {
         handleSearchChange,
         handlePageChange,
         updateURL,
-    } = useCatalog(location.pathname === "/favourites")
+    } = useCatalog(location.pathname === "/favourites", location.pathname !== "/unpublished");
     return (
         <div>
             {/*TODO:- add loader*/}

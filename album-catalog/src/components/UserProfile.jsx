@@ -4,7 +4,7 @@ import {Avatar} from "@nextui-org/avatar";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useContext} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
-import {CiDark, CiHeart} from "react-icons/ci";
+import {CiDark, CiHeart, CiPen} from "react-icons/ci";
 import {HiOutlineCog8Tooth} from "react-icons/hi2";
 import {HeartIcon} from "./icons/HeartIcon.jsx";
 
@@ -24,6 +24,12 @@ const UserProfile = () => {
 
     const handleSwitch = () => {
         navigate(isLiked ? "/catalog" : "/favourites");
+        navigate(0);
+    }
+
+    const goToModeration = () => {
+        navigate("/unpublished?page=1");
+        navigate(0);
     }
 
     return (
@@ -56,6 +62,9 @@ const UserProfile = () => {
                             <DropdownItem key="profile" className="h-14 gap-2">
                                 <p className="font-semibold">Signed in as</p>
                                 <p className="font-semibold">{session.user.email}</p>
+                            </DropdownItem>
+                            <DropdownItem startContent={<CiPen/>}>
+                                <Link onClick={goToModeration}>Moderation</Link>
                             </DropdownItem>
                             <DropdownItem startContent={<CiDark/>}>
                                 Toggle theme

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import {
     Button,
     Card,
@@ -11,22 +11,34 @@ import {
     DropdownSection,
     DropdownItem,
 } from "@nextui-org/react";
-import { HeartIcon } from "./icons/HeartIcon.jsx";
-import { SessionContext } from "../context/SessionContext.jsx";
-import { useNavigate } from "react-router-dom";
-import { AssetIsAbsent } from "./icons/AssetIsAbsent.jsx";
+import {HeartIcon} from "./icons/HeartIcon.jsx";
+import {SessionContext} from "../context/SessionContext.jsx";
+import {useNavigate} from "react-router-dom";
+import {AssetIsAbsent} from "./icons/AssetIsAbsent.jsx";
 import useLikeAlbum from "../hooks/useLikeAlbum.js";
 import {BsThreeDots} from "react-icons/bs";
+import useChangePublicState from "../hooks/useChangePublicState.js";
 
-export default function AlbumCard({ album, handleDeleteClick, variant = "catalog" }) {
-    const { session, role } = useContext(SessionContext);
+export default function AlbumCard({album, handleDeleteClick, variant = "catalog", isPublic}) {
+    const {session, role} = useContext(SessionContext);
     const navigate = useNavigate();
 
     // Assume session.user.id is the user's id (replace as needed)
     const userId = session?.user?.id;
-    const { isLiked, toggleLike, loading } = useLikeAlbum(album.id, album.isLiked);
+    const {isLiked, toggleLike} = useLikeAlbum(album.id, album.isLiked);
 
-    const isCatalogVariant = variant === "catalog"; // Check if it's the catalog variant
+    const {changePublicState, loading, error} = useChangePublicState();
+
+    const handlePublish = async () => {
+        const success = await changePublicState(album.id, true); // Set to `true` to publish
+        if (success) {
+            navigate('/catalog');
+        } else {
+            // Handle error, maybe show a notification
+            console.error('Failed to publish the album:', error);
+        }
+    };
+
 
     return (
         <Card key={album.id} className=" w-[238px] h-[355px]  border-black border-1 hover:border-gray-900">
@@ -43,7 +55,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                         height={300} // Ensure consistent image size
                     />
                 ) : (
-                    <AssetIsAbsent />
+                    <AssetIsAbsent/>
                 )}
             </CardBody>
 
@@ -55,7 +67,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                     <small>{album.genre1}</small>
                 </span>
 
-                {session?.user && (
+                {session?.user && location.pathname !== "/unpublished" && (
                     <Button
                         isIconOnly
                         className="text-red-600 hover:bg-red-200 absolute bottom-2 right-2"
@@ -72,7 +84,7 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                     </Button>
                 )}
 
-                {isCatalogVariant && session?.user && role === "REDACTOR" && (
+                {session?.user && role === "REDACTOR" && (
                     <Dropdown
                         showArrow
                         classNames={{
@@ -87,11 +99,22 @@ export default function AlbumCard({ album, handleDeleteClick, variant = "catalog
                                 radius="full"
                                 variant="light"
                             >
-                                <BsThreeDots />
+                                <BsThreeDots/>
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
                             <DropdownSection title="" showDivider>
+                                {
+                                    !isPublic &&
+                                    <DropdownItem
+                                        key="status"
+                                        description="Allows you to publish the album"
+                                        onClick={handlePublish}
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Publishing...' : 'Publish album'}
+                                    </DropdownItem>
+                                }
                                 <DropdownItem
                                     key="edit"
                                     description="Allows you to edit the album"

@@ -27,11 +27,16 @@ const NavBar = ({
                     format,
                     setFormat,
                 }) => {
+    const navigate = useNavigate();
     const {session, role} = useContext(SessionContext);
     const location = useLocation();
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
+    const goHome = () => {
+        navigate("/catalog/?page=1");
+        navigate(0);
+    }
 
     const pathsToExclude = ['/login', '/signup', '/favourites'];
     return (
@@ -41,7 +46,7 @@ const NavBar = ({
 
                 <MediaQuery min="md">
 
-                    <Link to="/catalog/?page=1"><MuseLogo/></Link>
+                    <div onClick={goHome}><MuseLogo/></div>
 
                     {!pathsToExclude.includes(location.pathname) &&
                         <>

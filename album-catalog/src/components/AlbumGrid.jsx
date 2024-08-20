@@ -42,6 +42,7 @@ export default function AlbumGrid({ filteredAlbums, setFilteredAlbums }) {
                             handleDeleteClick={() => handleOpenModal(album.id)} // Pass the album to the delete handler
                             key={album.id}
                             variant={location.pathname.includes("/catalog") ? "catalog" : "favorites"}
+                            isPublic={!location.pathname.includes("/unpublished")}
                         />
                     ))
                 ) :

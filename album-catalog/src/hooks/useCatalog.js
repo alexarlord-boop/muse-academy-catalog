@@ -3,7 +3,7 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import {supabase} from '../lib/helper/supabaseClient.js';
 import {SessionContext} from '../context/SessionContext.jsx';
 
-const useCatalog = (fetchFavoritesOnly = false) => {
+const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
     const [albumsNumber, setAlbumsNumber] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const {session} = useContext(SessionContext);
@@ -75,6 +75,7 @@ const useCatalog = (fetchFavoritesOnly = false) => {
         let query = supabase
             .from('album')
             .select('*', {count: 'exact'})
+            .eq('is_public', fetchPublishedOnly)
             .order('id', {ascending: true})
             .range(offset, offset + albumsPerPage - 1);
 

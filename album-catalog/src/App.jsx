@@ -10,6 +10,7 @@ import FavouritesPage from "./pages/FavouritesPage.jsx";
 import MainLayout from "./components/MainLayout.jsx";
 import AlbumPage from "./pages/AlbumPage.jsx";
 import AlbumEditPage from "./pages/AlbumEditPage.jsx";
+import UnpublishedPage from "./pages/UnpublishedPage.jsx";
 
 export default function App() {
 
@@ -35,6 +36,10 @@ export default function App() {
         {
             path: "/favourites",
             element: <MainLayout><FavouritesPage/></MainLayout>
+        },
+        {
+            path: "/unpublished",
+            element: <MainLayout><UnpublishedPage/></MainLayout>
         },
         {
             path: "/login",
