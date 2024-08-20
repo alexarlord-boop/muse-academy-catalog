@@ -1,22 +1,30 @@
-import {useState, useEffect, useContext} from 'react';
+import {useEffect, useContext, useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {supabase} from '../lib/helper/supabaseClient.js';
 import {SessionContext} from '../context/SessionContext.jsx';
+import useAlbumStore from "./useAlbumsStore.js";
 
-const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
-    const [albumsNumber, setAlbumsNumber] = useState(0);
-    const [searchTerm, setSearchTerm] = useState('');
+
+const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
     const {session} = useContext(SessionContext);
-    const [albumsPerPage, setAlbumsPerPage] = useState(10);
-    const [filteredAlbums, setFilteredAlbums] = useState([]);
-    const [genre, setGenre] = useState('');
-    const [format, setFormat] = useState('');
-
     const navigate = useNavigate();
     const location = useLocation();
 
+    const {
+        albumsNumber,
+        albumsPerPage,
+        filteredAlbums,
+        searchTerm,
+        genre,
+        format,
+        setAlbumsNumber,
+        setFilteredAlbums,
+        setSearchTerm,
+        setGenre,
+        setFormat,
+    } = useAlbumStore();
+
     useEffect(() => {
-        console.log("calling useCatalog: useEffect", location.search, fetchFavoritesOnly, session?.user, albumsNumber);
         const query = new URLSearchParams(location.search);
         const search = query.get('search') || '';
         const page = parseInt(query.get('page'), 10) || 1;
@@ -33,7 +41,6 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
             } else {
                 fetchAll(search, page, genreParam, formatParam);
             }
-
         }
     }, [location.search, fetchFavoritesOnly, session?.user, albumsNumber]);
 
@@ -44,19 +51,22 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
         let {data: favoriteData, count, error: favError} = await supabase
             .from('favorites')
             .select(`
-            album:album_id (id, name, art_creator, image_url, issue_date, genre1, format)
+            album:album_id (id, name, art_creator, image_url, issue_date, genre1, format, is_public)
         `, {count: 'exact'})
             .eq('user_id', userId)
+            .eq('album.is_public', true)
             .range(offset, offset + albumsPerPage - 1);
+
         if (favError) {
             console.error(favError);
             return;
         }
 
-        let filteredData = favoriteData.map(favorite => ({
-            ...favorite.album,
-            isLiked: true  // Mark these albums as liked
-        }));
+        let filteredData = favoriteData?.map(favorite =>
+            favorite.album ? {
+                ...favorite.album,
+                isLiked: true  // Mark these albums as liked
+            }: null).filter(album => album !== null);
 
         if (filteredData.length === 0) {
             updateURL(search, genre, format, 1);
@@ -67,11 +77,9 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
     };
 
     const fetchAll = async (search, page, genre, format) => {
-        console.log('calling useCatalog: fetching all albums');
         const offset = (page - 1) * albumsPerPage;
         const userId = session.user.id;
 
-        // Build the base query for albums
         let query = supabase
             .from('album')
             .select('*', {count: 'exact'})
@@ -79,22 +87,18 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
             .order('id', {ascending: true})
             .range(offset, offset + albumsPerPage - 1);
 
-        // Apply search filter (if search is provided)
         if (search) {
             query = query.or(`name.ilike.%${search}%,art_creator.ilike.%${search}%`);
         }
 
-        // Apply genre filter (if genre is provided)
         if (genre) {
             query = query.eq('genre1', genre);
         }
 
-        // Apply format filter (if format is provided)
         if (format) {
             query = query.eq('format', format);
         }
 
-        // Execute the query
         let {data: albumsData, count, error: albumError} = await query;
 
         if (albumError) {
@@ -102,7 +106,6 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
             return;
         }
 
-        // Fetch the user's favorites
         let {data: favoriteAlbums, error: favError} = await supabase
             .from('favorites')
             .select('album_id')
@@ -115,13 +118,11 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
 
         const favoriteAlbumIds = favoriteAlbums.map(fav => fav.album_id);
 
-        // Map albums and add isLiked status
         const enrichedAlbums = albumsData.map(album => ({
             ...album,
-            isLiked: favoriteAlbumIds.includes(album.id), // Check if the album is in the favorite list
+            isLiked: favoriteAlbumIds.includes(album.id),
         }));
 
-        // Set the state with the fetched data
         setFilteredAlbums(enrichedAlbums);
         setAlbumsNumber(count);
     };
@@ -147,17 +148,12 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly=false) => {
     return {
         albumsNumber,
         searchTerm,
-        albumsPerPage,
         filteredAlbums,
-        setFilteredAlbums,
         genre,
         format,
-        setSearchTerm,
-        setGenre,
-        setFormat,
         handleSearchChange,
         handlePageChange,
-        updateURL
+        updateURL,
     };
 };
 
