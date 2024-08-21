@@ -4,8 +4,7 @@ import useAlbum from "../hooks/useAlbum.js";
 import useFormats from "../hooks/useFormats.js";
 import useGenres from "../hooks/useGenres.js";
 import {Spacer} from "@nextui-org/react";
-import {AssetIsAbsent} from "../components/icons/AssetIsAbsent.jsx";
-import {Input, Textarea} from "@nextui-org/input";
+import {Input} from "@nextui-org/input";
 import {Button} from "@nextui-org/button";
 import {supabase} from "../lib/helper/supabaseClient.js";
 import toast from "react-hot-toast";
@@ -20,7 +19,10 @@ const AlbumEditPage = () => {
     const {formats, loading: formatsLoading, error: formatsError} = useFormats();
     const {genres, loading: genresLoading, error: genresError} = useGenres();
     const navigate = useNavigate();
+    const [artists, setArtists] = useState([]);
+    const [isNewArtist, setIsNewArtist] = useState(false);
     const [formData, setFormData] = useState({
+        art_creator: '',
         name: '',
         creation_info: '',
         concept_info: '',
@@ -28,12 +30,27 @@ const AlbumEditPage = () => {
         format: '',
         genre1: '',
         issue_date: '',
-        track_number: ''
+        track_number: '',
+        new_artist_name: '',
     });
 
     useEffect(() => {
+        // Fetch existing artists from the 'artist' table
+        const fetchArtists = async () => {
+            const {data, error} = await supabase.from('artist').select('*');
+            if (error) {
+                toast.error('Failed to load artists');
+            } else {
+                setArtists(data);
+                console.log('Artists:', data);
+            }
+        };
+
+        fetchArtists();
+
         if (album) {
             setFormData({
+                art_creator: album.art_creator || '',
                 name: album.name || '',
                 creation_info: album.creation_info || '',
                 concept_info: album.concept_info || '',
@@ -41,7 +58,8 @@ const AlbumEditPage = () => {
                 format: album.format || '',
                 genre1: album.genre1 || '',
                 issue_date: album.issue_date || '',
-                track_number: album.track_number || ''
+                track_number: album.track_number || '',
+                new_artist_name: '',
             });
         }
     }, [album]);
@@ -54,11 +72,50 @@ const AlbumEditPage = () => {
         });
     };
 
+    const handleArtistChange = (e) => {
+        const {value} = e.target;
+        console.log(value);
+        if (value === 'Add new artist') {
+            setIsNewArtist(true);
+            setFormData({
+                ...formData,
+                art_creator: '',
+                new_artist_name: '',
+            });
+        } else {
+            setIsNewArtist(false);
+            setFormData({
+                ...formData,
+                art_creator: value,
+                new_artist_name: '',
+            });
+        }
+    };
+
     const handleSave = async () => {
         try {
+            let artistId = formData.art_creator;
+
+            // If a new artist is being added
+            if (isNewArtist && formData.new_artist_name.trim() !== '') {
+                const {data: newArtist, error: newArtistError} = await supabase
+                    .from('artist')
+                    .insert({name: formData.new_artist_name.trim()})
+                    .select();
+
+                if (newArtistError) {
+                    toast.error('Failed to add new artist');
+                    throw new Error('Error inserting artist:', newArtistError);
+                }
+
+                toast.success('New artist added');
+                artistId = newArtist[0].name;
+            }
+
             const {data, error} = await supabase
-                .from('album') // Replace with your table name
+                .from('album')
                 .update({
+                    art_creator: artistId,
                     name: formData.name.trim(),
                     creation_info: formData.creation_info.trim(),
                     concept_info: formData.concept_info.trim(),
@@ -68,17 +125,17 @@ const AlbumEditPage = () => {
                     issue_date: formData.issue_date,
                     track_number: formData.track_number,
                 })
-                .eq('id', id) // Update the album with the matching ID
+                .eq('id', id)
                 .select();
 
             if (error) throw error;
             console.log('Album updated:', data);
             toast.success('Album updated');
 
-            // Navigate back to the album details page or show a success message
             navigate(`/catalog/${id}`);
         } catch (error) {
             console.error('Error updating album:', error);
+            toast.error('Failed to update album');
         }
     };
 
@@ -87,18 +144,14 @@ const AlbumEditPage = () => {
     if (formatsError) return <div>Error loading formats: {formatsError}</div>;
     if (genresError) return <div>Error loading genres: {genresError}</div>;
 
-    // TODO:- creation via draft-publish
     return (
         <>
             <div className="flex flex-wrap mx-auto p-6 bg-white">
                 <div className="w-full md:w-1/2 px-4">
-                    <p className="text-default-500 text-xl font-bold">{album.art_creator}</p>
-                    <Spacer y={3}/>
                     <div className="flex">
                         <EditInput size="lg" name="name" type="name" value={formData.name} onChange={handleChange}/>
                         <Spacer x={5}/>
-                        <EditInput type="date" value={formData.issue_date} onChange={handleChange}/>
-
+                        <EditInput name="issue_date" type="date" value={formData.issue_date} onChange={handleChange}/>
                     </div>
                     <Spacer y={3}/>
                     <div className="flex">
@@ -108,6 +161,23 @@ const AlbumEditPage = () => {
                         <Spacer x={5}/>
                         <EditInput size="md" name="track_number" type="number" value={formData.track_number}
                                    onChange={handleChange}/>
+                    </div>
+                    <Spacer y={3}/>
+                    <div className="flex">
+
+                        <EditSelect name="art_creator" value={formData.art_creator} onChange={handleArtistChange} options={[
+                            { id: 'new', name: 'Add new artist' },
+                            ...artists,
+
+                        ]}/>
+                        <Spacer x={5}/>
+                        {isNewArtist && (
+
+
+                                <EditInput size="lg" name="new_artist_name" type="artist name" placeholder="Enter new artist name"
+                                           value={formData.new_artist_name} onChange={handleChange}/>
+
+                        )}
                     </div>
 
                     <Spacer y={5}/>
@@ -125,7 +195,7 @@ const AlbumEditPage = () => {
                     <Spacer y={5}/>
                 </div>
 
-                <PreviewImage image_url={formData.image_url} />
+                <PreviewImage image_url={formData.image_url}/>
 
             </div>
         </>

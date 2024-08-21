@@ -2,7 +2,7 @@ import {Input} from "@nextui-org/input";
 import React from "react";
 
 
-export default function EditInput({size = "md", name, type, value, onChange}) {
+export default function EditInput({hidden, size = "md", name, type, value, onChange}) {
     let sizeClass = "w-1/2";
     switch (size) {
         case "sm":
@@ -19,6 +19,7 @@ export default function EditInput({size = "md", name, type, value, onChange}) {
     }
     return (
         <Input
+            hidden={hidden}
             name={name}
             type={type}
             placeholder={`Enter album ${type}`}
