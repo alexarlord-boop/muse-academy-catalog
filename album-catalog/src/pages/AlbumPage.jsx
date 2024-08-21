@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import useAlbum from "../hooks/useAlbum.js";
 import {Spacer} from "@nextui-org/react";
@@ -9,6 +9,9 @@ import {TbEdit, TbTrashX} from "react-icons/tb";
 import useModalStore from "../hooks/useStore.js";
 import {useDeleteRecord} from "../hooks/useDeleteRecord.js";
 import {deleteModalStrings} from "../strings.js";
+import {BiHide, BiShow} from "react-icons/bi";
+import usePublishToggle from "../hooks/usePublishToggle.js";
+import {CiPen} from "react-icons/ci";
 
 const AlbumPage = () => {
     const {id} = useParams();
@@ -16,9 +19,11 @@ const AlbumPage = () => {
     const navigate = useNavigate();
     const {session, role} = useContext(SessionContext);
 
-    const { openModal, setModalContent, updateOperation } = useModalStore();
+    const {openModal, setModalContent, updateOperation} = useModalStore();
+    const {handlePublishToggle, isProcessing, isPublic, setIsPublic} = usePublishToggle(album);
 
-    const { deleteRecord, deleteLoading, deleteError } = useDeleteRecord();
+
+    const {deleteRecord, deleteLoading, deleteError} = useDeleteRecord();
 
     const handleDelete = async () => {
         await deleteRecord('album', 'id', album.id, '/catalog');
@@ -62,8 +67,19 @@ const AlbumPage = () => {
                         <div className="flex flex-wrap">
                             <Button onClick={() => navigate('/catalog/edit/' + album.id)}
                                     className="mx-auto flex py-2"
-                                    startContent={<TbEdit/>}
+                                    startContent={<CiPen/>}
                             >Edit</Button>
+
+                            <Button
+                                className="gap-2 flex py-2"
+                                onClick={handlePublishToggle}
+                                startContent={isPublic ? <BiHide/> : <BiShow/>}
+                                disabled={isProcessing}
+                            >
+
+
+                                {isPublic ? 'Archive' : 'Publish'}
+                            </Button>
 
                             <Button onClick={handleOpenModal}
                                     className="mx-auto flex py-2"

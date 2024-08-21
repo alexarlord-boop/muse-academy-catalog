@@ -15,7 +15,9 @@ import {deleteModalStrings} from "../../strings.js";
 import useModalStore from "../../hooks/useStore.js";
 import {useDeleteRecord} from "../../hooks/useDeleteRecord.js";
 import useAlbumStore from "../../hooks/useAlbumsStore.js";
-import toast from "react-hot-toast";
+import usePublishToggle from "../../hooks/usePublishToggle.js";
+import {CiPen} from "react-icons/ci";
+import {BiHide, BiShow} from "react-icons/bi";
 
 export default function ContextToggle({album}) {
     const {session, role} = useContext(SessionContext);
@@ -26,30 +28,8 @@ export default function ContextToggle({album}) {
     const {openModal, setModalContent, updateOperation} = useModalStore();
     const {deleteRecord} = useDeleteRecord();
 
-    const handlePublishToggle = async () => {
-        let newAlbums = filteredAlbums;
-        const newState = !album.is_public; // Toggle the current state
+    const { handlePublishToggle, isProcessing, isPublic, setIsPublic } = usePublishToggle(album);
 
-        const success = await changePublicState(album.id, newState);
-        if (success) {
-            // Update the album's public state in the filteredAlbums
-            const updatedAlbums = filteredAlbums.map((a) =>
-                a.id === album.id ? {...a, is_public: newState} : a
-            );
-            setFilteredAlbums(updatedAlbums);
-
-            newAlbums = filteredAlbums.filter((a) => a.id !== album.id);
-            setFilteredAlbums(newAlbums);
-
-
-            // Show a success toast notification
-            toast.success(`Album ${newState ? 'published' : 'unpublished'} successfully`);
-        } else {
-            // Handle error, maybe show a notification
-            console.error('Failed to change the album public state:', error);
-            toast.error('Failed to change the album public state');
-        }
-    };
 
     const handleDelete = async (albumId) => {
         const newAlbums = filteredAlbums.filter((a) => a.id !== albumId);
@@ -92,15 +72,15 @@ export default function ContextToggle({album}) {
                             description={`Allows you to ${album.is_public ? 'unpublish' : 'publish'} the album`}
                             onClick={handlePublishToggle}
                             disabled={loading}
+                            startContent={isPublic ? <BiHide/> : <BiShow/>}
                         >
-                            {loading
-                                ? `${album.is_public ? 'Unpublishing' : 'Publishing'}...`
-                                : `${album.is_public ? 'Unpublish' : 'Publish'} album`}
+                            {`${album.is_public ? 'Archive' : 'Publish'} album`}
                         </DropdownItem>
                         <DropdownItem
                             key="edit"
                             description="Allows you to edit the album"
                             onClick={() => navigate("/catalog/edit/" + album.id)}
+                            startContent={<CiPen/>}
                         >
                             Edit album
                         </DropdownItem>
