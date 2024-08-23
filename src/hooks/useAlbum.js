@@ -29,7 +29,9 @@ const useAlbum = (id) => {
             } catch (error) {
                 setError(error.message);
             } finally {
-                setLoading(false);
+                setTimeout(()=>{
+                    setLoading(false);
+                }, 500)
             }
         };
 
