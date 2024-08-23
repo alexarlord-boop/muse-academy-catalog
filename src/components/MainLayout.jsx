@@ -28,7 +28,6 @@ const MainLayout = ({children}) => {
 
     return (
         <div>
-            {/*TODO:- add loader*/}
             <NavBar
                 handleSearchChange={handleSearchChange}
                 searchTerm={searchTerm}
