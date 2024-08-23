@@ -55,7 +55,7 @@ const LoginPage = () => {
     return (
         <div className="container md:w-1/2 sm:w-5/6 mx-auto">
             <Spacer y={15} />
-            <h1 className="text-4xl">Login</h1>
+            <h1 className="text-4xl">Log in</h1>
             <Spacer y={5} />
             <form onSubmit={handleLogin}>
                 <div>

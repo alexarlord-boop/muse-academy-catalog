@@ -1,6 +1,7 @@
 import React, {createContext, useEffect, useState} from "react";
 
 import {supabase} from "../lib/helper/supabaseClient.js";
+import {useNavigate} from "react-router-dom";
 
 export const SessionContext = createContext();
 
@@ -119,6 +120,7 @@ export const SessionProvider = ({children}) => {
                 console.log('Signed out successfully');
                 setSession(null);
                 setRole(null);
+                location.href = "";
             }
         } catch (error) {
             console.error('Unexpected error:', error);
