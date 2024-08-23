@@ -11,7 +11,7 @@ const MainLayout = ({children}) => {
         handleSearchChange,
         handlePageChange,
         updateURL,
-    } = useCatalog(location.pathname === "/favourites", location.pathname !== "/unpublished");
+    } = useCatalog(location.pathname === "/favorites", location.pathname !== "/unpublished");
 
     const {
         albumsNumber,

@@ -3,10 +3,8 @@ import AlbumGrid from '../components/AlbumGrid.jsx';
 import useCatalog from "../hooks/useCatalog.js";
 import CatalogPagination from "../components/CatalogPagination.jsx";
 
-const FavouritesPage = (
+const FavoritesPage = (
     {
-        filteredAlbums,
-        setFilteredAlbums,
         albumsNumber,
         albumsPerPage,
         handlePageChange,
@@ -25,4 +23,4 @@ const FavouritesPage = (
     );
 };
 
-export default FavouritesPage;
+export default FavoritesPage;

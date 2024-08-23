@@ -6,7 +6,7 @@ import {createBrowserRouter, RouterProvider, useNavigate,} from "react-router-do
 import CatalogPage from "./pages/CatalogPage.jsx";
 import RegistrationPage from "./pages/RegistrationPage.jsx";
 import IntroPage from "./pages/IntroPage.jsx";
-import FavouritesPage from "./pages/FavouritesPage.jsx";
+import FavoritesPage from "./pages/FavoritesPage.jsx";
 import MainLayout from "./components/MainLayout.jsx";
 import AlbumPage from "./pages/AlbumPage.jsx";
 import AlbumEditPage from "./pages/AlbumEditPage.jsx";
@@ -34,8 +34,8 @@ export default function App() {
             element: <MainLayout><AlbumEditPage/></MainLayout>
         },
         {
-            path: "/favourites",
-            element: <MainLayout><FavouritesPage/></MainLayout>
+            path: "/favorites",
+            element: <MainLayout><FavoritesPage/></MainLayout>
         },
         {
             path: "/unpublished",

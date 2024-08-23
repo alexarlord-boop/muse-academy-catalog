@@ -14,7 +14,7 @@ const UserProfile = () => {
     const {logOut} = useContext(SessionContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const isLiked = location.pathname.includes("/favourites");
+    const isLiked = location.pathname.includes("/favorites");
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -23,7 +23,7 @@ const UserProfile = () => {
     };
 
     const handleSwitch = () => {
-        navigate(isLiked ? "/catalog" : "/favourites");
+        navigate(isLiked ? "/catalog" : "/favorites");
         navigate(0);
     }
 

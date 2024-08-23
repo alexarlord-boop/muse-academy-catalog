@@ -38,7 +38,7 @@ const NavBar = ({
         navigate(0);
     }
 
-    const pathsToExclude = ['/login', '/signup', '/favourites'];
+    const pathsToExclude = ['/login', '/signup', '/favorites'];
     return (
         <Navbar className="py-0 px-4" maxWidth="full" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
@@ -84,8 +84,8 @@ const NavBar = ({
                 </NavbarItem>
 
                 {session?.user &&
-                    <NavbarItem isActive={location.pathname === "/favourites"}>
-                        <Link to="/favourites" aria-current="page">Favourites</Link>
+                    <NavbarItem isActive={location.pathname === "/favorites"}>
+                        <Link to="/favorites" aria-current="page">Favorites</Link>
                     </NavbarItem>
                 }
             </NavbarMenu>
