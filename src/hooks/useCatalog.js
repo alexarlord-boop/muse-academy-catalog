@@ -1,4 +1,4 @@
-import {useEffect, useContext, useState} from 'react';
+import {useEffect, useContext, useState, useLayoutEffect} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {supabase} from '../lib/helper/supabaseClient.js';
 import {SessionContext} from '../context/SessionContext.jsx';
@@ -10,7 +10,11 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
     const navigate = useNavigate();
     const location = useLocation();
 
+
+
     const {
+        loading,
+        setLoading,
         albumsNumber,
         albumsPerPage,
         filteredAlbums,
@@ -24,7 +28,8 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
         setFormat,
     } = useAlbumStore();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+
         const query = new URLSearchParams(location.search);
         const search = query.get('search') || '';
         const page = parseInt(query.get('page'), 10) || 1;
@@ -36,11 +41,15 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
         setFormat(formatParam);
 
         if (session?.user) {
+            setLoading(true);
             if (fetchFavoritesOnly) {
                 fetchFavorites(search, page, genreParam, formatParam);
             } else {
                 fetchAll(search, page, genreParam, formatParam);
             }
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000)
         }
     }, [location.search, fetchFavoritesOnly, session?.user, albumsNumber]);
 
@@ -146,6 +155,7 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
     };
 
     return {
+        loading,
         albumsNumber,
         searchTerm,
         filteredAlbums,

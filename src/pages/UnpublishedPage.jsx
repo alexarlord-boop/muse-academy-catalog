@@ -1,24 +1,25 @@
 import React from 'react';
 import AlbumGrid from "../components/AlbumGrid.jsx";
 import CatalogPagination from "../components/CatalogPagination.jsx";
+import CustomSpinner from "../components/Spinner.jsx";
 
 const UnpublishedPage = (  {
-                               filteredAlbums,
-                               setFilteredAlbums,
-                               albumsNumber,
-                               albumsPerPage,
-                               handlePageChange,
+                               loading,
                            }
 ) => {
     return (
         <>
-            <AlbumGrid/>
+            {!loading ? (
+                    <>
+                        <AlbumGrid/>
+                        <CatalogPagination/>
+                    </>
+                ) :
+                (
+                    <CustomSpinner/>
+                )
 
-            <CatalogPagination
-                albumsNumber={albumsNumber}
-                albumsPerPage={albumsPerPage}
-                onPageChange={handlePageChange}
-            />
+            }
         </>
     );
 };

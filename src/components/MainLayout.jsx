@@ -14,6 +14,7 @@ const MainLayout = ({children}) => {
     } = useCatalog(location.pathname === "/favorites", location.pathname !== "/unpublished");
 
     const {
+        loading,
         albumsNumber,
         albumsPerPage,
         filteredAlbums,
@@ -40,6 +41,7 @@ const MainLayout = ({children}) => {
             <main className="container mx-auto px-5">
                 {
                     React.cloneElement(children, {
+                        loading,
                         filteredAlbums,
                         setFilteredAlbums,
                         albumsNumber,
