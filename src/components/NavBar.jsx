@@ -9,7 +9,6 @@ import MuseLogo from "./MuseLogo.jsx";
 import {SessionContext} from "../context/SessionContext.jsx";
 import {useNavigate, useLocation} from "react-router-dom";
 import {Link} from "react-router-dom";
-import useCatalog from "../hooks/useCatalog.js";
 import SearchInput from "./SearchInput.jsx";
 import FilterModal from "./FilterModal.jsx";
 
@@ -38,7 +37,7 @@ const NavBar = ({
         navigate(0);
     }
 
-    const pathsToExclude = ['/login', '/signup', '/favorites'];
+    const pathsToExclude = ['/login', '/signup', '/favorites', '/unpublished'];
     return (
         <Navbar className="py-0 px-4" maxWidth="full" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
