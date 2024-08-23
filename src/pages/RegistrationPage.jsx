@@ -36,7 +36,7 @@ const LoginPage = () => {
         <>
             <div className="container md:w-1/2 sm:w-5/6 mx-auto">
                 <Spacer y={15}/>
-                <h1 className="text-6xl">Registration Page</h1>
+                <h1 className="text-4xl">Registration</h1>
                 <Spacer y={5}/>
                 <form onSubmit={handleRegistration}>
                     <div>
