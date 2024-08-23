@@ -59,16 +59,18 @@ const UserProfile = () => {
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Profile Actions" variant="flat">
                             <DropdownItem key="profile" className="h-14 gap-2">
-                                <p className="font-semibold">Signed in as</p>
                                 <p className="font-semibold">{session.user.email}</p>
                             </DropdownItem>
-                            <DropdownItem startContent={<CiPen/>}>
-                                <Link onClick={goToModeration}>Moderation</Link>
-                            </DropdownItem>
-                            <DropdownItem startContent={<CiDark/>}>
-                                Toggle theme
-                            </DropdownItem>
-                            <DropdownItem key="settings" startContent={<HiOutlineCog8Tooth/>}>My Settings</DropdownItem>
+                            {
+                                session?.user && role === 'REDACTOR' &&
+                                <DropdownItem startContent={<CiPen/>}>
+                                    <Link onClick={goToModeration}>Moderation</Link>
+                                </DropdownItem>
+                            }
+                            {/*<DropdownItem startContent={<CiDark/>}>*/}
+                            {/*    Toggle theme*/}
+                            {/*</DropdownItem>*/}
+                            {/*<DropdownItem key="settings" startContent={<HiOutlineCog8Tooth/>}>My Settings</DropdownItem>*/}
                             <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                                 Log Out
                             </DropdownItem>
