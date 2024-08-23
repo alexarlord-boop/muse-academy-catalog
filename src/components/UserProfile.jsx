@@ -19,7 +19,6 @@ const UserProfile = () => {
     const handleLogout = async (e) => {
         e.preventDefault();
         await logOut();
-        // navigate("/login")
     };
 
     const handleSwitch = () => {

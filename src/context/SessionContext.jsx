@@ -120,7 +120,7 @@ export const SessionProvider = ({children}) => {
                 console.log('Signed out successfully');
                 setSession(null);
                 setRole(null);
-                window.location.href = "/catalog";
+                window.location.href = "/login";
             }
         } catch (error) {
             console.error('Unexpected error:', error);
