@@ -14,6 +14,8 @@ import EditText from "../components/EditPageComponents/EditText.jsx";
 import PreviewImage from "../components/EditPageComponents/PreviewImage.jsx";
 import CustomSpinner from "../components/Spinner.jsx";
 
+// TODO:- add image saving to DB
+// TODO:- refactor code
 const AlbumEditPage = () => {
     const {id} = useParams();
     const {album, loading, error} = useAlbum(id);
