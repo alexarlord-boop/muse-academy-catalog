@@ -26,7 +26,7 @@ const AlbumPage = () => {
     const {deleteRecord, deleteLoading, deleteError} = useDeleteRecord();
 
     const handleDelete = async () => {
-        await deleteRecord('album', 'id', album.id, '/catalog');
+        await deleteRecord('album', 'id', album.id, '/catalog/?page=1' );
     };
 
     const handleOpenModal = () => {
