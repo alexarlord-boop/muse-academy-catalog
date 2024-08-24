@@ -64,7 +64,7 @@ const UserProfile = () => {
                             {
                                 session?.user && role === 'REDACTOR' &&
                                 <DropdownItem startContent={<CiPen/>}>
-                                    <Link onClick={goToModeration}>Moderation</Link>
+                                    <Link onClick={goToModeration}><p>Moderation</p></Link>
                                 </DropdownItem>
                             }
                             {/*<DropdownItem startContent={<CiDark/>}>*/}
