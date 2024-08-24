@@ -4,8 +4,10 @@ export const deleteModalStrings = {
     description: "Are you sure you want to delete this album? This action cannot be undone."
 }
 
-export const publishModalStrings = {
-    modalTitle: "Publish Album",
-    confirmTitle: "Confirm Publishing",
-    description: "Are you sure you want to publish this album?",
+export function getPublishModalStrings(newStatus)  {
+    return {
+        modalTitle: "Change status: " + newStatus,
+        confirmTitle: "Change status: " + newStatus,
+        description: `Are you sure you want to ${newStatus} this album?`,
+    }
 }

@@ -11,7 +11,7 @@ import React, {useContext} from "react";
 import {SessionContext} from "../../context/SessionContext.jsx";
 import useChangePublicState from "../../hooks/useChangePublicState.js";
 import {useNavigate} from "react-router-dom";
-import {deleteModalStrings} from "../../strings.js";
+import {deleteModalStrings, getPublishModalStrings} from "../../strings.js";
 import useModalStore from "../../hooks/useStore.js";
 import {useDeleteRecord} from "../../hooks/useDeleteRecord.js";
 import useAlbumStore from "../../hooks/useAlbumsStore.js";
@@ -44,6 +44,14 @@ export default function ContextToggle({album}) {
         openModal();
     };
 
+
+    const handleOpenPublishModal = () => {
+
+        setModalContent(getPublishModalStrings(isPublic ? 'archive' : 'publish'));
+        updateOperation(handlePublishToggle);
+        openModal();
+    }
+
     const handleDeleteClick = () => handleOpenModal(album.id);
 
     return (
@@ -70,7 +78,7 @@ export default function ContextToggle({album}) {
                         <DropdownItem
                             key="status"
                             description={`Allows you to ${album.is_public ? 'unpublish' : 'publish'} the album`}
-                            onClick={handlePublishToggle}
+                            onClick={handleOpenPublishModal}
                             disabled={loading}
                             startContent={isPublic ? <BiHide/> : <BiShow/>}
                         >

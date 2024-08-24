@@ -8,7 +8,7 @@ import {SessionContext} from "../context/SessionContext.jsx";
 import {TbEdit, TbTrashX} from "react-icons/tb";
 import useModalStore from "../hooks/useStore.js";
 import {useDeleteRecord} from "../hooks/useDeleteRecord.js";
-import {deleteModalStrings} from "../strings.js";
+import {deleteModalStrings, getPublishModalStrings} from "../strings.js";
 import {BiHide, BiShow} from "react-icons/bi";
 import usePublishToggle from "../hooks/usePublishToggle.js";
 import {CiPen} from "react-icons/ci";
@@ -30,11 +30,17 @@ const AlbumPage = () => {
         await deleteRecord('album', 'id', album.id, '/catalog/?page=1' );
     };
 
-    const handleOpenModal = () => {
+    const handleOpenDeleteModal = () => {
         setModalContent(deleteModalStrings);
         updateOperation(handleDelete);
         openModal();
     };
+
+    const handleOpenPublishModal = () => {
+        setModalContent(getPublishModalStrings(isPublic ? 'archive' : 'publish'));
+        updateOperation(handlePublishToggle);
+        openModal();
+    }
 
 
     if (loading) return <Loader/>;
@@ -74,7 +80,7 @@ const AlbumPage = () => {
 
                             <Button
                                 className="gap-2 flex py-2"
-                                onClick={handlePublishToggle}
+                                onClick={handleOpenPublishModal}
                                 startContent={isPublic ? <BiHide/> : <BiShow/>}
                                 disabled={isProcessing}
                             >
@@ -83,7 +89,7 @@ const AlbumPage = () => {
                                 {isPublic ? 'Archive' : 'Publish'}
                             </Button>
 
-                            <Button onClick={handleOpenModal}
+                            <Button onClick={handleOpenDeleteModal}
                                     className="mx-auto flex py-2"
                                     color="danger"
                                     startContent={<TbTrashX/>}
