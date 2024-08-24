@@ -14,8 +14,6 @@ import EditText from "../components/EditPageComponents/EditText.jsx";
 import PreviewImage from "../components/EditPageComponents/PreviewImage.jsx";
 import CustomSpinner from "../components/Spinner.jsx";
 
-// TODO:- add image saving to DB
-// TODO:- refactor code
 const AlbumEditPage = () => {
     const {id} = useParams();
     const {album, loading, error} = useAlbum(id);
@@ -35,6 +33,7 @@ const AlbumEditPage = () => {
         issue_date: '',
         track_number: '',
         new_artist_name: '',
+        imageFile: null, // New state for image file
     });
 
     useEffect(() => {
@@ -63,6 +62,7 @@ const AlbumEditPage = () => {
                 issue_date: album.issue_date || '',
                 track_number: album.track_number || '',
                 new_artist_name: '',
+                imageFile: null, // Ensure this is reset on load
             });
         }
     }, [album]);
@@ -75,9 +75,20 @@ const AlbumEditPage = () => {
         });
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({
+                ...formData,
+                imageFile: file,
+                image_url: URL.createObjectURL(file) // For preview
+            });
+            console.log(file);
+        }
+    };
+
     const handleArtistChange = (e) => {
         const {value} = e.target;
-        console.log(value);
         if (value === 'Add new artist') {
             setIsNewArtist(true);
             setFormData({
@@ -115,6 +126,34 @@ const AlbumEditPage = () => {
                 artistId = newArtist[0].name;
             }
 
+            let imageUrl = formData.image_url;
+
+            // If an image file is selected, upload it to Supabase Storage
+            if (formData.imageFile) {
+                const fileExt = formData.imageFile.name.split('.').pop();
+                const fileName = `${id}.${fileExt}`;
+                const filePath = `albums/${fileName}`;
+
+                const {error: uploadError} = await supabase
+                    .storage
+                    .from('muse-catalog') // Make sure your bucket name is correct
+                    .upload(filePath, formData.imageFile, {
+                        cacheControl: '3600',
+                        upsert: true,
+                    });
+
+                if (uploadError) {
+                    console.error('Error uploading file:', uploadError);
+                    toast.error('Failed to upload image');
+                    return;
+                }
+
+                // Get the public URL for the uploaded image
+                const {data: publicUrl} = supabase.storage.from('muse-catalog').getPublicUrl(filePath);
+                imageUrl = publicUrl.publicUrl;
+                console.log(imageUrl);
+            }
+
             const {data, error} = await supabase
                 .from('album')
                 .update({
@@ -122,7 +161,7 @@ const AlbumEditPage = () => {
                     name: formData.name.trim(),
                     creation_info: formData.creation_info.trim(),
                     concept_info: formData.concept_info.trim(),
-                    image_url: formData.image_url.trim(),
+                    image_url: imageUrl.trim(), // Use uploaded image URL or existing URL
                     format: formData.format.trim(),
                     genre1: formData.genre1.trim(),
                     issue_date: formData.issue_date,
@@ -167,19 +206,14 @@ const AlbumEditPage = () => {
                     </div>
                     <Spacer y={3}/>
                     <div className="flex">
-
                         <EditSelect name="art_creator" value={formData.art_creator} onChange={handleArtistChange} options={[
                             { id: 'new', name: 'Add new artist' },
                             ...artists,
-
                         ]}/>
                         <Spacer x={5}/>
                         {isNewArtist && (
-
-
-                                <EditInput size="lg" name="new_artist_name" type="artist name" placeholder="Enter new artist name"
-                                           value={formData.new_artist_name} onChange={handleChange}/>
-
+                            <EditInput size="lg" name="new_artist_name" type="artist name" placeholder="Enter new artist name"
+                                       value={formData.new_artist_name} onChange={handleChange}/>
                         )}
                     </div>
 
@@ -191,7 +225,8 @@ const AlbumEditPage = () => {
                         <Spacer y={3}/>
                         <EditText name="concept_info" value={formData.concept_info} onChange={handleChange}/>
                         <Spacer y={3}/>
-                        <EditInput size="lg" type="image_url" value={formData.image_url} onChange={handleChange}/>
+                        <Spacer y={3}/>
+                        <input type="file" accept="image/*" onChange={handleFileChange}/>
                         <Spacer y={5}/>
                     </div>
                     <Button onClick={handleSave} className="mx-auto flex py-2">Save</Button>
