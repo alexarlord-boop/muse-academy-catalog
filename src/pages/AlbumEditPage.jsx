@@ -12,7 +12,7 @@ import EditInput from "../components/EditPageComponents/EditInput.jsx";
 import EditSelect from "../components/EditPageComponents/EditSelect.jsx";
 import EditText from "../components/EditPageComponents/EditText.jsx";
 import PreviewImage from "../components/EditPageComponents/PreviewImage.jsx";
-import CustomSpinner from "../components/Spinner.jsx";
+import Loader from "../components/Loader.jsx";
 
 const AlbumEditPage = () => {
     const {id} = useParams();
@@ -181,7 +181,7 @@ const AlbumEditPage = () => {
         }
     };
 
-    if (loading) return <CustomSpinner/>;
+    if (loading) return <Loader/>;
     if (error) return <div>Error: {error}</div>;
     if (formatsError) return <div>Error loading formats: {formatsError}</div>;
     if (genresError) return <div>Error loading genres: {genresError}</div>;

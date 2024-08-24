@@ -12,7 +12,7 @@ import {deleteModalStrings} from "../strings.js";
 import {BiHide, BiShow} from "react-icons/bi";
 import usePublishToggle from "../hooks/usePublishToggle.js";
 import {CiPen} from "react-icons/ci";
-import CustomSpinner from "../components/Spinner.jsx";
+import Loader from "../components/Loader.jsx";
 
 const AlbumPage = () => {
     const {id} = useParams();
@@ -37,7 +37,7 @@ const AlbumPage = () => {
     };
 
 
-    if (loading) return <CustomSpinner/>;
+    if (loading) return <Loader/>;
     if (error) return <div>Error: {error}</div>;
 
 
