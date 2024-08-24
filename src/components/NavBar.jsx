@@ -39,7 +39,7 @@ const NavBar = ({
 
     const pathsToExclude = ['/login', '/signup', '/favorites', '/unpublished'];
     return (
-        <Navbar className="py-0 px-4" maxWidth="full" isBlurred={true} isBordered={true}
+        <Navbar shouldHideOnScroll className="py-0 px-4" maxWidth="full" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
 
