@@ -188,7 +188,8 @@ const AlbumEditPage = () => {
 
     return (
         <>
-            <div className="flex flex-wrap mx-auto p-6 bg-white">
+            <Spacer y={5}/>
+            <div className="flex flex-wrap mx-auto bg-white">
                 <div className="w-full md:w-1/2 px-4">
                     <div className="flex">
                         <EditInput size="lg" name="name" type="name" value={formData.name} onChange={handleChange}/>
@@ -234,6 +235,7 @@ const AlbumEditPage = () => {
                 </div>
 
                 <PreviewImage image_url={formData.image_url}/>
+                <Spacer y={5}/>
 
             </div>
         </>

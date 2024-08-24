@@ -39,7 +39,7 @@ const MainLayout = ({children}) => {
                 format={format}
                 setFormat={setFormat}
             />
-            <main className="container mx-auto px-5">
+            <main className="container mx-auto">
                 {
                     React.cloneElement(children, {
                         loading,

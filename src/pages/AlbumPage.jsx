@@ -43,7 +43,8 @@ const AlbumPage = () => {
 
     return (
         <>
-            <div className="flex flex-wrap mx-auto p-6 bg-white">
+            <Spacer y={5}/>
+            <div className="flex flex-wrap mx-auto bg-white">
                 <div className="w-full md:w-1/2 max-h-full px-4">
                     <div className="text-6xl font-bold">{album.name}</div>
                     <Spacer y={3}/>
@@ -65,7 +66,7 @@ const AlbumPage = () => {
                     </div>
 
                     {session?.user && role === "REDACTOR" && (
-                        <div className="flex flex-wrap">
+                        <div className="flex gap-2">
                             <Button onClick={() => navigate('/catalog/edit/' + album.id)}
                                     className="mx-auto flex py-2"
                                     startContent={<CiPen/>}
@@ -104,6 +105,7 @@ const AlbumPage = () => {
                         <AssetIsAbsent/>
                     )}
                 </div>
+                <Spacer y={5}/>
             </div>
         </>
     );
