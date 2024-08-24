@@ -4,9 +4,10 @@ import {Avatar} from "@nextui-org/avatar";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useContext} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
-import {CiDark, CiHeart, CiPen} from "react-icons/ci";
+import {CiCirclePlus, CiDark, CiHeart, CiPen, CiSquarePlus} from "react-icons/ci";
 import {HiOutlineCog8Tooth} from "react-icons/hi2";
 import {HeartIcon} from "./icons/HeartIcon.jsx";
+import useSampleAlbum from "../hooks/useSampleAlbum.js";
 
 
 const UserProfile = () => {
@@ -30,6 +31,8 @@ const UserProfile = () => {
         navigate("/unpublished?page=1");
         navigate(0);
     }
+
+    const {addSampleAlbum} = useSampleAlbum();
 
     return (
 
@@ -67,6 +70,13 @@ const UserProfile = () => {
                                     <Link onClick={goToModeration}><p>Moderation</p></Link>
                                 </DropdownItem>
                             }
+                            {
+                                session?.user && role === 'REDACTOR' &&
+                                <DropdownItem startContent={<CiSquarePlus/>}>
+                                    <Link onClick={addSampleAlbum}><p>Add album</p></Link>
+                                </DropdownItem>
+                            }
+
                             {/*<DropdownItem startContent={<CiDark/>}>*/}
                             {/*    Toggle theme*/}
                             {/*</DropdownItem>*/}

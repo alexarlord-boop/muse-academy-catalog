@@ -14,7 +14,6 @@ import FilterModal from "./FilterModal.jsx";
 
 import MediaQuery from "./MediaQuery.jsx";
 import UserProfile from "./UserProfile.jsx";
-import AddButton from "./AddButton.jsx";
 
 
 const NavBar = ({
@@ -41,16 +40,11 @@ const NavBar = ({
     return (
         <Navbar shouldHideOnScroll className="py-0 px-4" maxWidth="full" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
-            <NavbarContent>
 
                 <MediaQuery min="md">
-
-                    <div onClick={goHome}><MuseLogo/></div>
-
+                    <div className="cursor-pointer" onClick={goHome}><MuseLogo/></div>
                     {!pathsToExclude.includes(location.pathname) &&
-                        <>
-                            <NavbarContent></NavbarContent>
-                            <NavbarContent>
+                        <NavbarContent>
                                 <SearchInput
                                     searchTerm={searchTerm}
                                     handleSearchChange={handleSearchChange}
@@ -66,17 +60,13 @@ const NavBar = ({
                                     onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
                                     onClearFilters={() => updateURL(searchTerm, null, null, 1)}
                                 />
-                            </NavbarContent>
-
-                            <NavbarContent><AddButton/></NavbarContent>
-                        </>
+                        </NavbarContent>
                     }
 
                 </MediaQuery>
 
                 <UserProfile/>
 
-            </NavbarContent>
             <NavbarMenu>
                 <NavbarItem isActive={location.pathname === "/catalog"}>
                     <Link to="/catalog?page=1" aria-current="page">Albums</Link>
