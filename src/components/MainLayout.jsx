@@ -52,6 +52,8 @@ const MainLayout = ({children}) => {
 
             setFilteredAlbums(filteredData);
             setAlbumsNumber(count);
+            console.log('fetched by this');
+
         }
     }, [session]);
 
