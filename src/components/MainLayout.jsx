@@ -7,11 +7,13 @@ import useAlbumStore from "../hooks/useAlbumsStore.js";
 
 const MainLayout = ({children}) => {
 
+    const fetchFavOnly = location.pathname === "/favorites";
+    const fetchPublicOnly = location.pathname !== "/unpublished";
     const {
         handleSearchChange,
         handlePageChange,
         updateURL,
-    } = useCatalog(location.pathname === "/favorites", location.pathname !== "/unpublished");
+    } = useCatalog(fetchFavOnly, fetchPublicOnly);
 
     const {
         loading,
