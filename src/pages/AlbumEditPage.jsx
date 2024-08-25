@@ -197,53 +197,129 @@ const AlbumEditPage = () => {
     return (
         <>
             <Spacer y={5} />
-            <div className="flex flex-wrap mx-auto bg-white">
+            <div className="flex flex-wrap mx-auto bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg">
                 <div className="w-full md:w-1/2 px-4">
                     <div className="flex">
-                        <EditInput size="lg" name="name" type="name" value={formData.name} onChange={handleChange} />
+                        <EditInput
+                            size="lg"
+                            name="name"
+                            type="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="text-black dark:text-white"
+                        />
                         <Spacer x={5} />
-                        <EditInput name="issue_date" type="date" value={formData.issue_date} onChange={handleChange} />
+                        <EditInput
+                            name="issue_date"
+                            type="date"
+                            value={formData.issue_date}
+                            onChange={handleChange}
+                            className="text-black dark:text-white"
+                        />
                     </div>
                     <Spacer y={3} />
                     <div className="flex">
-                        <EditSelect name="format" value={formData.format} onChange={handleChange} options={formats} />
+                        <EditSelect
+                            name="format"
+                            value={formData.format}
+                            onChange={handleChange}
+                            options={formats}
+                            className="text-black dark:text-white"
+                        />
                         <Spacer x={5} />
-                        <EditSelect name="genre1" value={formData.genre1} onChange={handleChange} options={genres} />
+                        <EditSelect
+                            name="genre1"
+                            value={formData.genre1}
+                            onChange={handleChange}
+                            options={genres}
+                            className="text-black dark:text-white"
+                        />
                         <Spacer x={5} />
-                        <EditInput size="md" name="track_number" type="number" value={formData.track_number} onChange={handleChange} />
+                        <EditInput
+                            size="md"
+                            name="track_number"
+                            type="number"
+                            value={formData.track_number}
+                            onChange={handleChange}
+                            className="text-black dark:text-white"
+                        />
                     </div>
                     <Spacer y={3} />
                     <div className="flex">
-                        <EditSelect name="art_creator" value={formData.art_creator} onChange={handleArtistChange} options={[
-                            { id: 'new', name: 'Add new artist' },
-                            ...artists,
-                        ]} />
+                        <EditSelect
+                            name="art_creator"
+                            value={formData.art_creator}
+                            onChange={handleArtistChange}
+                            options={[
+                                { id: 'new', name: 'Add new artist' },
+                                ...artists,
+                            ]}
+                            className="text-black dark:text-white"
+                        />
                         <Spacer x={5} />
                         {isNewArtist && (
-                            <EditInput size="lg" name="new_artist_name" type="artist name" placeholder="Enter new artist name" value={formData.new_artist_name} onChange={handleChange} />
+                            <EditInput
+                                size="lg"
+                                name="new_artist_name"
+                                type="artist name"
+                                placeholder="Enter new artist name"
+                                value={formData.new_artist_name}
+                                onChange={handleChange}
+                                className="text-black dark:text-white"
+                            />
                         )}
                     </div>
 
                     <Spacer y={5} />
                     <div>
-                        <h2 className="text-xl font-semibold">About the Album</h2>
+                        <h2 className="text-xl font-semibold text-black dark:text-white">About the Album</h2>
                         <Spacer y={2} />
-                        <EditText name="creation_info" value={formData.creation_info} onChange={handleChange} />
+                        <EditText
+                            name="creation_info"
+                            value={formData.creation_info}
+                            onChange={handleChange}
+                            className="text-black dark:text-white"
+                        />
                         <Spacer y={3} />
-                        <EditText name="concept_info" value={formData.concept_info} onChange={handleChange} />
+                        <EditText
+                            name="concept_info"
+                            value={formData.concept_info}
+                            onChange={handleChange}
+                            className="text-black dark:text-white"
+                        />
                         <Spacer y={3} />
                         <Spacer y={3} />
-                        <input id="fileInput" type="file" accept="image/*" onChange={handleFileChange} />
-                        <Spacer y={2} />
-                        {/* Clear Button for Image */}
-                        {formData.image_url && (
-                            <Button onClick={handleClearImage} className="mx-auto flex py-2" color="error">
-                                Clear Image
-                            </Button>
-                        )}
+
+                        <div className="flex"><input
+                            id="fileInput"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="text-black dark:text-white"
+                        />
+                            {/* Clear Button for Image */}
+                            {formData.image_url && (
+                                <Button
+                                    size="sm"
+                                    onClick={handleClearImage}
+                                    className="mx-auto flex py-2 text-white bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+                                    color="error"
+                                >
+                                    Clear Image
+                                </Button>
+                            )}
+
+                        </div>
+
+
                         <Spacer y={5} />
                     </div>
-                    <Button onClick={handleSave} className="mx-auto flex py-2">Save</Button>
+                    <Button
+                        onClick={handleSave}
+                        className="mx-auto flex py-2 bg-gray-100 text-black dark:bg-gray-700 dark:text-white"
+                    >
+                        Save
+                    </Button>
                     <Spacer y={5} />
                 </div>
 
