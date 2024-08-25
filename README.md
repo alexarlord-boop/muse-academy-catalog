@@ -1,4 +1,5 @@
 # Music Album Catalog
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
 A responsive web application built with React.js that serves as a catalog for music albums. The application includes user authentication, album management, and search functionalities, with distinct roles for editors and visitors. Backend functionality is managed using a BaaS service like Supabase.
