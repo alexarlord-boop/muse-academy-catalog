@@ -4,10 +4,10 @@ import {Avatar} from "@nextui-org/avatar";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useContext} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
-import {CiCirclePlus, CiDark, CiHeart, CiPen, CiSquarePlus} from "react-icons/ci";
-import {HiOutlineCog8Tooth} from "react-icons/hi2";
+import {CiCirclePlus, CiDark, CiHeart, CiLight, CiPen, CiSquarePlus} from "react-icons/ci";
 import {HeartIcon} from "./icons/HeartIcon.jsx";
 import useSampleAlbum from "../hooks/useSampleAlbum.js";
+import {useTheme} from "next-themes";
 
 
 const UserProfile = () => {
@@ -16,6 +16,11 @@ const UserProfile = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isLiked = location.pathname.includes("/favorites");
+    const {theme, setTheme} = useTheme();
+
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
+    };
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -77,10 +82,13 @@ const UserProfile = () => {
                                 </DropdownItem>
                             }
 
-                            {/*<DropdownItem startContent={<CiDark/>}>*/}
-                            {/*    Toggle theme*/}
-                            {/*</DropdownItem>*/}
-                            {/*<DropdownItem key="settings" startContent={<HiOutlineCog8Tooth/>}>My Settings</DropdownItem>*/}
+                            <DropdownItem startContent={theme === 'light' ? <CiDark size={20}/> : <CiLight size={20}/>}>
+                                <p
+                                    onClick={toggleTheme}
+                                >
+                                    {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                                </p>
+                            </DropdownItem>
                             <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                                 Log Out
                             </DropdownItem>
