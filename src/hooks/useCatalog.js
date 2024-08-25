@@ -55,35 +55,46 @@ const useCatalog = (fetchFavoritesOnly = false, fetchPublishedOnly = false) => {
 
     const fetchFavorites = async (search, page, genre, format) => {
         const offset = (page - 1) * albumsPerPage;
-
         const userId = session.user.id;
-        let {data: favoriteData, count, error: favError} = await supabase
-            .from('favorites')
-            .select(`
-            album:album_id (id, name, art_creator, image_url, issue_date, genre1, format, is_public)
-        `, {count: 'exact'})
-            .eq('user_id', userId)
-            .eq('album.is_public', true)
-            .range(offset, offset + albumsPerPage - 1);
 
-        if (favError) {
-            console.error(favError);
-            return;
+        try {
+            let { data: favoriteData, count, error: favError } = await supabase
+                .from('favorites')
+                .select(
+                    `album:album_id (id, name, art_creator, image_url, issue_date, genre1, format, is_public)`,
+                    { count: 'exact' }
+                )
+                .eq('user_id', userId)
+                .eq('album.is_public', true)
+                .range(offset, offset + albumsPerPage - 1);
+
+            if (favError) throw favError;
+
+            // Check what data is being returned
+            console.log("Fetched Favorites Data:", favoriteData);
+
+            let filteredData = favoriteData
+                ?.map(favorite =>
+                    favorite.album
+                        ? {
+                            ...favorite.album,
+                            isLiked: true, // Mark these albums as liked
+                        }
+                        : null
+                )
+                .filter(album => album !== null);
+
+            if (filteredData.length === 0) {
+                updateURL(search, genre, format, 1);
+            }
+
+            setFilteredAlbums(filteredData);
+            setAlbumsNumber(count);
+        } catch (error) {
+            console.error("Error fetching favorites:", error);
         }
-
-        let filteredData = favoriteData?.map(favorite =>
-            favorite.album ? {
-                ...favorite.album,
-                isLiked: true  // Mark these albums as liked
-            } : null).filter(album => album !== null);
-
-        if (filteredData.length === 0) {
-            updateURL(search, genre, format, 1);
-        }
-
-        setFilteredAlbums(filteredData);
-        setAlbumsNumber(count);
     };
+
 
     const fetchAll = async (search, page, genre, format) => {
         const offset = (page - 1) * albumsPerPage;
