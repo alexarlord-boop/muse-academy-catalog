@@ -4,6 +4,7 @@ import CustomToast from "./CustomToast.jsx";
 import ConfirmationModal from "./ConfirmationModal.jsx";
 import useCatalog from "../hooks/useCatalog.js";
 import useAlbumStore from "../hooks/useAlbumsStore.js";
+import Footer from "./Footer.jsx";
 
 const MainLayout = ({children}) => {
 
@@ -53,6 +54,7 @@ const MainLayout = ({children}) => {
             </main>
             <CustomToast/>
             <ConfirmationModal/> {/* deletion, publishing */}
+            <Footer/>
         </div>
     );
 };
