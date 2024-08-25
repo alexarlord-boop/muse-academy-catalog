@@ -31,7 +31,7 @@ export default function SearchInput(
                     innerWrapper: "bg-transparent",
                     inputWrapper: [
                         "bg-transparent",
-                        "border-2",
+                        "border-2 dark:border-transparent dark:border-gray-900 dark:border-gray-700",
                         "rounded-l-xl",
 
                     ],

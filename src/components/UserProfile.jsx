@@ -4,7 +4,7 @@ import {Avatar} from "@nextui-org/avatar";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useContext} from "react";
 import {SessionContext} from "../context/SessionContext.jsx";
-import {CiCirclePlus, CiDark, CiHeart, CiLight, CiPen, CiSquarePlus} from "react-icons/ci";
+import {CiDark, CiLight, CiPen, CiSquarePlus} from "react-icons/ci";
 import {HeartIcon} from "./icons/HeartIcon.jsx";
 import useSampleAlbum from "../hooks/useSampleAlbum.js";
 import {useTheme} from "next-themes";
@@ -56,13 +56,12 @@ const UserProfile = () => {
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
                             <Avatar
-                                isBordered
                                 as="button"
                                 className="transition-transform"
-                                color="secondary"
+                                color="black"
                                 name="Jason Hughes"
                                 size="sm"
-                                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                                src="https://avatars.githubusercontent.com/u/55353828?v=4"
                             />
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Profile Actions" variant="flat">
