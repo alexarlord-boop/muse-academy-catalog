@@ -107,16 +107,16 @@ const FilterModal = ({
                                     </Select>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button auto onPress={() => {
+                                    <Button  onPress={() => {
+                                        handleClearFilters();
+                                        onClose();
+                                    }}>Clear</Button>
+                                    <Button auto color="danger" onPress={() => {
                                         handleApplyFilters();
                                         onClose();
                                     }}>
                                         Apply
                                     </Button>
-                                    <Button color="danger" onPress={() => {
-                                        handleClearFilters();
-                                        onClose();
-                                    }}>Clear</Button>
                                 </ModalFooter>
                             </>
                         )}
