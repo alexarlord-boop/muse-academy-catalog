@@ -50,7 +50,7 @@ const AlbumPage = () => {
     return (
         <>
             <Spacer y={5} />
-            <div className="flex flex-wrap mx-auto bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg">
+            <div className="flex flex-wrap mx-auto bg-white dark:bg-black p-5 rounded-lg shadow-lg">
                 <div className="w-full md:w-1/2 max-h-full px-4">
                     <div className="text-6xl font-bold text-black dark:text-white">{album.name}</div>
                     <Spacer y={3} />

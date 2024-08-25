@@ -197,7 +197,7 @@ const AlbumEditPage = () => {
     return (
         <>
             <Spacer y={5} />
-            <div className="flex flex-wrap mx-auto bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg">
+            <div className="flex flex-wrap mx-auto bg-white dark:bg-black p-5 rounded-lg shadow-lg">
                 <div className="w-full md:w-1/2 px-4">
                     <div className="flex">
                         <EditInput
@@ -297,17 +297,17 @@ const AlbumEditPage = () => {
                             onChange={handleFileChange}
                             className="text-black dark:text-white"
                         />
-                            {/* Clear Button for Image */}
-                            {formData.image_url && (
-                                <Button
-                                    size="sm"
-                                    onClick={handleClearImage}
-                                    className="mx-auto flex py-2 text-white bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
-                                    color="error"
-                                >
-                                    Clear Image
-                                </Button>
-                            )}
+                            {/*/!* Clear Button for Image *!/*/}
+                            {/*{formData.image_url && (*/}
+                            {/*    <Button*/}
+                            {/*        size="sm"*/}
+                            {/*        onClick={handleClearImage}*/}
+                            {/*        className="mx-auto flex py-2 text-white bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"*/}
+                            {/*        color="error"*/}
+                            {/*    >*/}
+                            {/*        Clear Image*/}
+                            {/*    </Button>*/}
+                            {/*)}*/}
 
                         </div>
 
