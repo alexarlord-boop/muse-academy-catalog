@@ -1,7 +1,3 @@
-Creating a README for a GitHub project is essential as it provides users with an overview of your project, installation instructions, usage guidelines, and other important details. Here’s a comprehensive README for your music album catalog project.
-
----
-
 # Music Album Catalog
 
 A responsive web application built with React.js that serves as a catalog for music albums. The application includes user authentication, album management, and search functionalities, with distinct roles for editors and visitors. Backend functionality is managed using a BaaS service like Supabase.
