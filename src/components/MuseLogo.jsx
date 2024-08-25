@@ -1,19 +1,29 @@
 import React from 'react';
 import { Image } from '@nextui-org/react';
-// import logoSrc from '../assets/Muse_Group_logo.svg';
-import logoSrc from '../assets/Muse_Group_logo_2024.svg';
-import {useNavigate} from "react-router-dom"; // Adjust the path based on your project structure
+import logoLightSrc from '../assets/logo-light.svg'; // Light mode logo
+import logoDarkSrc from '../assets/logo-dark.svg';  // Dark mode logo
 
 const Logo = () => {
-    const navigate = useNavigate();
 
     return (
-        <Image
-            src={logoSrc}
-            alt="Logo"
-            width={200}
-            height={200}
-        />
+        <div>
+            {/* Light mode logo */}
+            <Image
+                src={logoDarkSrc}
+                alt="Logo"
+                width={200}
+                height={200}
+                className="block dark:hidden" // Show only in light mode
+            />
+            {/* Dark mode logo */}
+            <Image
+                src={logoLightSrc}
+                alt="Logo"
+                width={200}
+                height={200}
+                className="hidden dark:block" // Show only in dark mode
+            />
+        </div>
     );
 };
 
