@@ -10,7 +10,7 @@ export default function AlbumGrid() {
     return (
         <div className="container flex items-center justify-center h-full">
             <div className="mt-3 gap-4 grid  lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
-                {filteredAlbums.length > 0 && (
+                {filteredAlbums?.length > 0 && (
                     filteredAlbums.map((album) => (
                         <AlbumCard
                             album={album}
