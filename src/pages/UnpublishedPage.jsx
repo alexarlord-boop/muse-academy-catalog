@@ -3,9 +3,10 @@ import AlbumGrid from "../components/AlbumGrid.jsx";
 import CatalogPagination from "../components/CatalogPagination.jsx";
 import Loader from "../components/Loader.jsx";
 
-const UnpublishedPage = (  {
-                               loading,
-                           }
+const UnpublishedPage = (
+    {
+        loading,
+    }
 ) => {
     return (
         <>

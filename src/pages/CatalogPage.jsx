@@ -6,9 +6,6 @@ import Loader from "../components/Loader.jsx";
 const CatalogPage = (
     {
         loading,
-        albumsNumber,
-        albumsPerPage,
-        handlePageChange,
     }
 ) => {
     return (

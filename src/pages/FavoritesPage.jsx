@@ -2,23 +2,26 @@ import React from 'react';
 import AlbumGrid from '../components/AlbumGrid.jsx';
 import useCatalog from "../hooks/useCatalog.js";
 import CatalogPagination from "../components/CatalogPagination.jsx";
+import Loader from "../components/Loader.jsx";
 
 const FavoritesPage = (
     {
-        albumsNumber,
-        albumsPerPage,
-        handlePageChange,
+        loading,
     }
 ) => {
     return (
         <>
-            <AlbumGrid/>
+            {!loading ? (
+                    <>
+                        <AlbumGrid/>
+                        <CatalogPagination/>
+                    </>
+                ) :
+                (
+                    <Loader/>
+                )
 
-            <CatalogPagination
-                albumsNumber={albumsNumber}
-                albumsPerPage={albumsPerPage}
-                onPageChange={handlePageChange}
-            />
+            }
         </>
     );
 };
