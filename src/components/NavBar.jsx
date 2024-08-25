@@ -38,34 +38,36 @@ const NavBar = ({
 
     const pathsToExclude = ['/login', '/signup', '/favorites', '/unpublished'];
     return (
-        <Navbar shouldHideOnScroll className="py-0 px-4" maxWidth="full" isBlurred={true} isBordered={true}
+        <Navbar shouldHideOnScroll className="py-0" maxWidth="full" isBlurred={true} isBordered={true}
                 onMenuOpenChange={setIsMenuOpen}>
 
-                <MediaQuery min="md">
-                    <div className="cursor-pointer" onClick={goHome}><MuseLogo/></div>
-                    {!pathsToExclude.includes(location.pathname) &&
-                        <NavbarContent>
-                                <SearchInput
-                                    searchTerm={searchTerm}
-                                    handleSearchChange={handleSearchChange}
-                                    updateURL={updateURL}
-                                    genre={genre}
-                                    format={format}
-                                />
-                                <FilterModal
-                                    genre={genre}
-                                    setGenre={setGenre}
-                                    format={format}
-                                    setFormat={setFormat}
-                                    onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
-                                    onClearFilters={() => updateURL(searchTerm, null, null, 1)}
-                                />
-                        </NavbarContent>
-                    }
+            <MediaQuery min="md">
+                <div className="cursor-pointer" onClick={goHome}><MuseLogo/></div>
+            </MediaQuery>
+            {!pathsToExclude.includes(location.pathname) ?
+                (<NavbarContent>
+                    <SearchInput
+                        searchTerm={searchTerm}
+                        handleSearchChange={handleSearchChange}
+                        updateURL={updateURL}
+                        genre={genre}
+                        format={format}
+                    />
+                    <FilterModal
+                        genre={genre}
+                        setGenre={setGenre}
+                        format={format}
+                        setFormat={setFormat}
+                        onApplyFilters={(genre, format) => updateURL(searchTerm, genre, format, 1)}
+                        onClearFilters={() => updateURL(searchTerm, null, null, 1)}
+                    />
+                </NavbarContent>)
+                :
+                (<NavbarContent></NavbarContent>)
+            }
 
-                </MediaQuery>
 
-                <UserProfile/>
+            <UserProfile/>
 
             <NavbarMenu>
                 <NavbarItem isActive={location.pathname === "/catalog"}>

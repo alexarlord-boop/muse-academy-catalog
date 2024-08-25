@@ -24,7 +24,7 @@ export default function SearchInput(
                 classNames={{
                     label: "text-black/50 dark:text-white/90",
                     input: [
-                        "w-[400px]",
+                        "md:w-[400px]",
                         "text-black/90 dark:text-white/90",
                         "placeholder:text-default-700/50 dark:placeholder:text-white/60",
                     ],

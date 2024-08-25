@@ -39,7 +39,7 @@ const UserProfile = () => {
         session?.user
             ?
             <>
-                <NavbarContent as="div" justify="end">
+                <NavbarContent as="div" justify="" className="float-end">
                     <NavbarItem className="text-red-600 hover:bg-red-200 rounded-full p-1">
                         <HeartIcon size={30}
                                    className={isLiked ? "[&>path]:stroke-transparent" : ""}
