@@ -26,16 +26,17 @@ A responsive web application built with React.js that serves as a catalog for mu
 
 ## Tech Stack
 
-- **Frontend**: React.js, React Router, Context API
+- **Frontend**: React.js, React Router, Zustand
 - **Backend**: Supabase (BaaS)
-- **Styling**: Tailwind CSS / Material UI (choose based on your styling approach)
+- **Styling**: Tailwind CSS
 - **Deployment**: AWS Amplify
 
 ## Usage
 
 ### Authentication
 
-- Register as a new user or log in with an existing account.
+- Register as a new user or log in with an existing account
+- visitor@gmail.com / redactor@gmail.com (11112222)
 - Upon successful login, users can navigate to different sections of the app based on their role.
 
 ### Album Catalog
@@ -46,7 +47,8 @@ A responsive web application built with React.js that serves as a catalog for mu
 ### Album Management (Editor Role)
 
 - Editors can add new albums using the "Add Album" button.
-- To edit or delete an album, navigate to the album's details page and use the provided options.
+- Newly added albums are stored in archive, publishing reveal them to everybody.
+- To edit or delete an album, navigate to the album's details page or card context menu and use the provided options.
 
 ### Favorites
 
@@ -69,11 +71,5 @@ Here are some screenshots of the application:
 - **Favorites Page**: ![Favorites Page](screenshots/favorites-page.png)
 - **Dark Mode**: ![Dark Mode](screenshots/dark-mode.png)
 
-*(Add screenshots of your application to the `screenshots` folder and reference them here)*
-
-
-## Contact
-
-Your Name - [your.email@example.com](mailto:your.email@example.com)
 
 Project Link: [https://github.com/yourusername/music-album-catalog](https://github.com/yourusername/music-album-catalog)
