@@ -19,10 +19,9 @@ A responsive web application built with React.js that serves as a catalog for mu
 - **User Authentication**: Supports login and registration with role-based access (editor and visitor).
 - **Album Catalog**: Paginated list of music albums with search and filter functionality.
 - **Album Details Page**: View detailed information about a music album.
-- **Album Management**: Editors can add, edit, or delete albums.
+- **Album Management**: Editors can add, edit, delete or archive/publish albums.
 - **Favorites**: Users can add albums to a favorites list and view them on a dedicated page.
 - **Dark Theme Support**: Toggle between light and dark themes.
-- **Responsive Design**: Optimized for all devices, ensuring a seamless user experience.
 
 ## Tech Stack
 
