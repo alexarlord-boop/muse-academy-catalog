@@ -7,7 +7,7 @@ const IntroPage = () => {
     return <div className="container h-screen text-center my-auto ">
         <h1 className="text-3xl lg:text-6xl">Frontend Academy</h1>
         <p>landing page for the project...</p>
-       <Button onClick={() => navigate('/catalog')}>Explore Albums</Button>
+       <Button onClick={() => navigate('/login')}>Explore Albums</Button>
     </div>
 }
 
