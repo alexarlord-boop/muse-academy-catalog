@@ -17,7 +17,7 @@ export default function Footer() {
                         <a href="https://github.com/alexarlord-boop/muse-academy-catalog/blob/main/README.md#screenshots" className="hover:underline me-4 md:me-6">About</a>
                     </li>
                     <li>
-                        <a href="#" className="hover:underline me-4 md:me-6">LinkedIn</a>
+                        <a href="https://www.linkedin.com/in/aleksandr-petrunin-b4b720259/" className="hover:underline me-4 md:me-6">LinkedIn</a>
                     </li>
                     <li>
                         <a href="#" className="hover:underline">Contact</a>
