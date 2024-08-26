@@ -57,8 +57,8 @@ A responsive web application built with React.js that serves as a catalog for mu
 
 To run this project, you will need to add the following environment variables to your `.env` file:
 
-- `REACT_APP_SUPABASE_URL`: The URL of your Supabase project.
-- `REACT_APP_SUPABASE_ANON_KEY`: The anonymous public API key for your Supabase project.
+- `VITE_REACT_APP_SUPABASE_URL`: The URL of your Supabase project.
+- `VITE_REACT_APP_SUPABASE_ANON_KEY`: The anonymous public API key for your Supabase project.
 
 ## Screenshots
 
